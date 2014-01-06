@@ -1,0 +1,26 @@
+{
+	"name": "anchorcms/anchor-core",
+	"description": "Library",
+	"license": "GPL-3.0",
+	"version": "0.1.0",
+	"type": "library",
+	"authors": [
+		{
+			"name": "Kieron Wilson",
+			"email": "kieron@madebykieron.co.uk",
+			"homepage": "http://madebykieron.co.uk",
+			"role": "Developer"
+		}
+	],
+	"require": {
+		"php": ">=5.3",
+		"rwarasaurus/ship": "dev-master",
+		"ircmaxell/password-compat": "dev-master"
+	},
+	"autoload": {
+		"psr-0": {
+			"Anchor": "src/"
+		},
+		"files": []
+	}
+}
