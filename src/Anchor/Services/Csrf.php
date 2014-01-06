@@ -7,9 +7,11 @@
  * @license		http://opensource.org/licenses/GPL-3.0
  */
 
+use Ship\Contracts\SessionInterface;
+
 class Csrf {
 
-	public function __construct($session) {
+	public function __construct(SessionInterface $session) {
 		$this->session = $session;
 	}
 

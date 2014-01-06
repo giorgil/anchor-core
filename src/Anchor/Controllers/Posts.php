@@ -7,17 +7,12 @@
  * @license		http://opensource.org/licenses/GPL-3.0
  */
 
-use Anchor\Services\Registry;
-
 class Posts extends Base {
 
 	public function index() {
 		$page = $this->getCurrentPage();
 
-		Registry::puts(array(
-			'Page' => $page,
-			'Posts' => $this->app['posts'],
-		));
+		$this->app['registry']->put('page', $page);
 
 		return $this->renderTemplate('posts', $page->slug);
 	}
@@ -25,10 +20,7 @@ class Posts extends Base {
 	public function category() {
 		$page = $this->getCurrentPage();
 
-		Registry::puts(array(
-			'Page' => $page,
-			'Posts' => $this->app['posts'],
-		));
+		$this->app['registry']->put('page', $page);
 
 		return $this->renderTemplate('posts', $page->slug);
 	}

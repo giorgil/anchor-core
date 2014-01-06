@@ -7,9 +7,11 @@
  * @license		http://opensource.org/licenses/GPL-3.0
  */
 
+use Ship\Contracts\SessionInterface;
+
 class Auth {
 
-	public function __construct($session, $users) {
+	public function __construct(SessionInterface $session, $users) {
 		$this->session = $session;
 		$this->users = $users;
 	}

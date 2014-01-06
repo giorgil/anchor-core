@@ -15,9 +15,7 @@ class Categories extends Base {
 	protected $table = 'categories';
 
 	public function create($row) {
-		$record = get_object_vars($row);
-
-		return new Category(new ArrayObject($record));
+		return new Category($row);
 	}
 
 }

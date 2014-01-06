@@ -7,12 +7,16 @@
  * @license		http://opensource.org/licenses/GPL-3.0
  */
 
+use Ship\Contracts\SessionInterface;
+
 class Messages {
+
+	protected $session;
 
 	protected $format = '<p class="{type}">{message}</p>';
 
-	public function __construct($storage) {
-		$this->storage = $storage;
+	public function __construct(SessionInterface $session) {
+		$this->session = $session;
 	}
 
 	public function __call($method, $args) {
@@ -24,7 +28,7 @@ class Messages {
 	}
 
 	public function add($type, $message) {
-		$messages = $this->storage->get('messages');
+		$messages = $this->session->get('messages');
 
 		if( ! is_array($message)) {
 			$message = array($message);
@@ -36,11 +40,11 @@ class Messages {
 
 		$messages[$type] = array_merge($messages[$type], $message);
 
-		$this->storage->put('messages', $messages);
+		$this->session->put('messages', $messages);
 	}
 
 	public function render($format = null) {
-		$messages = $this->storage->get('messages', array());
+		$messages = $this->session->get('messages', array());
 		$html = '';
 
 		foreach($messages as $type => $group) {
@@ -49,7 +53,8 @@ class Messages {
 			}
 		}
 
-		$this->storage->remove('messages');
+		$this->session->remove('messages');
+
 		return $html;
 	}
 

@@ -43,9 +43,7 @@ class Pages extends Base {
 	}
 
 	public function create($row) {
-		$record = get_object_vars($row);
-
-		return new Page(new \ArrayObject($record));
+		return new Page($row);
 	}
 
 }

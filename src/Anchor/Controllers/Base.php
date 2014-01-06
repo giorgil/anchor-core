@@ -9,11 +9,10 @@
 
 use ErrorException;
 
-use Ship\View;
-use Ship\Exception\HttpNotFound;
-
 use Anchor\Models\Page;
-use Anchor\Services\Registry;
+use Anchor\Exception\HttpNotFound;
+
+use Ship\View;
 
 class Base {
 
@@ -21,13 +20,6 @@ class Base {
 
 	public function __construct($app) {
 		$this->app = $app;
-
-		Registry::puts(array(
-			'Date' => $this->app['date'],
-			'Menu' => $this->app['pages'],
-			'Meta' => $this->app['meta'],
-			'Uri' => $this->app['uri']
-		));
 	}
 
 	protected function getCurrentPage() {
@@ -88,10 +80,7 @@ class Base {
 
 	public function notFound($title = 'Resource Not Found') {
 		$page = $this->app['pages']->home();
-
-		Registry::puts(array(
-			'Page' => $page,
-		));
+		$this->app['registry']->put('page', $page);
 
 		$html = $this->renderTemplate('404', '', array('message' => $title));
 

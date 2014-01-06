@@ -7,8 +7,6 @@
  * @license		http://opensource.org/licenses/GPL-3.0
  */
 
-use Anchor\Services\Registry;
-
 class Feeds extends Base {
 
 	public function rss() {

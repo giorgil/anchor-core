@@ -1,4 +1,4 @@
-<?php namespace Anchor\Services;
+<?php namespace Anchor\Exception;
 
 /**
  * @package		Anchor Core
@@ -7,6 +7,6 @@
  * @license		http://opensource.org/licenses/GPL-3.0
  */
 
-use Ship\Collection;
+use Exception;
 
-class Registry extends Collection {}
+class HttpNotFound extends Exception {}

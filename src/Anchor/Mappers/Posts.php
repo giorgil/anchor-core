@@ -54,11 +54,10 @@ class Posts extends Base {
 	/**
 	 * Creates a new Post object
 	 *
-	 * @param object stdClass
+	 * @param object
 	 */
 	public function create($row) {
-		$record = get_object_vars($row);
-		$post = new Post(new ArrayObject($record));
+		$post = new Post($row);
 
 		$categories = new Categories($this->query);
 		$post->category = $categories->find($post->category);

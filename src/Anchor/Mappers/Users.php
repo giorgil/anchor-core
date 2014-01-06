@@ -15,9 +15,7 @@ class Users extends Base {
 	protected $table = 'users';
 
 	public function create($row) {
-		$record = get_object_vars($row);
-
-		return new User(new ArrayObject($record));
+		return new User($row);
 	}
 
 }

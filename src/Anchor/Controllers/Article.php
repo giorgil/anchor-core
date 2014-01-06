@@ -7,8 +7,7 @@
  * @license		http://opensource.org/licenses/GPL-3.0
  */
 
-use Ship\Exception\HttpNotFound;
-use Anchor\Services\Registry;
+use Anchor\Exception\HttpNotFound;
 
 class Article extends Base {
 
@@ -24,7 +23,7 @@ class Article extends Base {
 		throw new HttpNotFound('Post ID not found');
 	}
 
-	public function index($request, $route) {
+	public function view($request, $route) {
 		$page = $this->app['pages']->posts();
 
 		$params = $route->getParams();
@@ -33,11 +32,8 @@ class Article extends Base {
 		$article = $this->app['posts']->fetch($this->app['posts']->where('slug', '=', $slug));
 
 		if($article) {
-			Registry::puts(array(
-				'Article' => $article,
-				'Page' => $page,
-				'Posts' => $this->app['posts'],
-			));
+			$this->app['registry']->put('article', $article);
+			$this->app['registry']->put('page', $page);
 
 			return $this->renderTemplate('article', $article->slug);
 		}
