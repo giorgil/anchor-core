@@ -1,0 +1,20 @@
+<?php echo $menu; ?>
+
+<section class="list">
+	<ul>
+		<?php foreach($pages as $page): ?>
+		<li>
+			<a href="<?php echo $this->getHelper('uri')->to('admin/pages/'.$page->id.'/edit'); ?>">
+				<?php echo $page->title; ?>
+				<span><?php echo $page->name; ?></span>
+			</a>
+		</li>
+		<?php endforeach; ?>
+	</ul>
+</section>
+
+<main class="content">
+	<hgroup>
+		<h1><?php echo $title; ?></h1>
+	</hgroup>
+</main>

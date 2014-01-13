@@ -7,7 +7,7 @@
  * @license		http://opensource.org/licenses/GPL-3.0
  */
 
-use Anchor\Exception\HttpNotFound;
+use Anchor\Exceptions\HttpNotFound;
 
 class Article extends Base {
 

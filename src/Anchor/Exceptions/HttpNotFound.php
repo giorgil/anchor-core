@@ -1,4 +1,4 @@
-<?php namespace Anchor\Exception;
+<?php namespace Anchor\Exceptions;
 
 /**
  * @package		Anchor Core

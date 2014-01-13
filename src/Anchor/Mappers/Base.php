@@ -8,24 +8,32 @@
  */
 
 use Closure;
+use Iterator;
+
 use Ship\Database\Table;
 
 class Base extends Table {
 
-	protected $iterator;
+	protected $results;
+
+	public function setResults(Iterator $results) {
+		$this->results = $results;
+	}
 
 	public function loop(Closure $callback) {
-		if(is_null($this->iterator)) {
-			$this->iterator = $this->all()->getIterator();
+		if(null === $this->results) {
+			$this->results = new \ArrayIterator($this->all());
 		}
 
-		if($this->iterator->valid()) {
-			$callback($this->iterator->current());
-			$this->iterator->next();
+		if($this->results->valid()) {
+			$callback($this->results->current());
+
+			$this->results->next();
+
 			return true;
 		}
 
-		$this->iterator = null;
+		$this->results->rewind();
 
 		return false;
 	}

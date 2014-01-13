@@ -1,0 +1,29 @@
+<?php namespace Anchor\Forms\Fields;
+
+/**
+ * @package		Anchor Core
+ * @link		http://anchorcms.com
+ * @copyright	Copyright 2014 Anchor CMS
+ * @license		http://opensource.org/licenses/GPL-3.0
+ */
+
+class Textarea extends Field {
+
+	protected $prototype = '<textarea %s>%s</textarea>';
+
+	public function getHtml() {
+		$this->attr['name'] = $this->name;
+
+		if(isset($this->attr['value'])) {
+			$value = $this->attr['value'];
+
+			unset($this->attr['value']);
+		}
+		else {
+			$value = '';
+		}
+
+		return sprintf($this->prototype, $this->getAttrString($this->attr), $value);
+	}
+
+}

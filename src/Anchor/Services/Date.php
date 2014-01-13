@@ -33,7 +33,7 @@ class Date {
 	 * @param string
 	 * @param string
 	 */
-	public function __construct($tz, $format) {
+	public function __construct(DateTimeZone $tz, $format) {
 		$this->tz = $tz;
 		$this->format = $format;
 	}
@@ -45,7 +45,7 @@ class Date {
 	 */
 	public function format($date, $format = null) {
 		$date = new DateTime($date, new DateTimeZone('UTC'));
-		$date->setTimezone(new DateTimeZone($this->tz));
+		$date->setTimezone($this->tz);
 
 		return $date->format($format ?: $this->format);
 	}
@@ -56,7 +56,7 @@ class Date {
 	 * @param string
 	 */
 	public function mysql($date) {
-		$date = new DateTime($date, new DateTimeZone($this->tz));
+		$date = new DateTime($date, $this->tz);
 		$date->setTimezone(new DateTimeZone('UTC'));
 
 		return $date->format('Y-m-d H:i:s');

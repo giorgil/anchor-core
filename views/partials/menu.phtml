@@ -1,0 +1,31 @@
+<section class="menu">
+	<nav class="main">
+		<ul>
+			<?php foreach($nav as $item): ?>
+			<?php if($item->active): ?>
+			<li class="active">
+			<?php else: ?>
+			<li>
+			<?php endif; ?>
+				<a class="<?php echo $item->class; ?>" href="<?php echo $item->uri; ?>"><?php echo $item->title; ?></a>
+			</li>
+			<?php endforeach; ?>
+		</ul>
+	</nav>
+
+	<nav class="bottom">
+		<ul>
+			<li>
+				<a href="<?php echo $this->getHelper('uri')->to('admin/logout'); ?>">
+					<i class="flaticon logout-1"></i>
+					<span>Logout <?php //echo $this->getHelper('lang')->translate('Logout'); ?></span>
+				</a>
+			</li>
+			<li>
+				<a href="<?php echo $this->getHelper('uri')->to('/'); ?>">
+					<i class="flaticon view-3"></i> <span>View Site</span>
+				</a>
+			</li>
+		</ul>
+	</nav>
+</section>

@@ -10,7 +10,7 @@
 use ErrorException;
 
 use Anchor\Models\Page;
-use Anchor\Exception\HttpNotFound;
+use Anchor\Exceptions\HttpNotFound;
 
 use Ship\View;
 
@@ -22,17 +22,19 @@ class Base {
 		$this->app = $app;
 	}
 
+	protected function getSlug() {
+		return substr(strrchr($this->app['request']->getUri(), '/'), 1);
+	}
+
 	protected function getCurrentPage() {
-		if($this->app['request']->uri() == '/') {
+		if($this->app['request']->getUri() == '/') {
 			return $this->app['pages']->home();
 		}
 
-		$parts = $this->app['request']->segments();
-		$slug = end($parts);
+		$slug = $this->getSlug();
+		$query = $this->app['pages']->where('slug', '=', $slug);
 
-		$page = $this->app['pages']->fetch($this->app['pages']->where('slug', '=', $slug));
-
-		if($page) {
+		if($page = $this->app['pages']->fetch($query)) {
 			return $page;
 		}
 

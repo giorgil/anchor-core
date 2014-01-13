@@ -1,0 +1,23 @@
+<?php echo $menu; ?>
+
+<?php echo $form->open(); ?>
+
+<section class="list">
+	<?php foreach($form->getElementsExcept(array('title', 'markdown', 'save')) as $field): ?>
+	<p><label><?php echo $field->getLabel(); ?></label><br>
+	<?php echo $field->getHtml(); ?></p>
+	<?php endforeach; ?>
+</section>
+
+<main class="content">
+	<hgroup>
+		<h1><?php echo $title; ?></h1>
+		<p><?php echo $form->getElement('save')->getHtml(); ?></p>
+	</hgroup>
+
+	<p><?php echo $form->getElement('title')->getHtml(); ?></p>
+
+	<p><?php echo $form->getElement('markdown')->getHtml(); ?></p>
+</main>
+
+<?php echo $form->close(); ?>

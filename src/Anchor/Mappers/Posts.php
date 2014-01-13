@@ -61,10 +61,10 @@ class Posts extends Base {
 
 		$categories = new Categories($this->query);
 		$post->category = $categories->find($post->category);
-
+		/*
 		$comments = new Comments($this->query);
 		$post->total_comments = $comments->where('status', '=', 'published')->count();
-
+		*/
 		$users = new Users($this->query);
 		$post->author = $users->find($post->author);
 
@@ -72,12 +72,12 @@ class Posts extends Base {
 	}
 
 	/**
-	 * Fetch a buffered array of all posts
+	 * Fetch a buffered array of published posts
 	 *
 	 * @return object ArrayObject
 	 */
-	public function all($query = null) {
-		return parent::all($this->query()
+	public function published() {
+		return $this->all($this->query()
 			->where('status', '=', 'published')
 			->order('created', 'desc'));
 	}
