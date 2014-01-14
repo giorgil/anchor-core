@@ -16,25 +16,43 @@ use Ship\View;
 
 class Base {
 
-	protected $app;
+	protected $posts;
+	protected $pages;
+	protected $templates;
+	protected $registry;
+	protected $request;
+	protected $response;
+	protected $uri;
 
-	public function __construct($app) {
-		$this->app = $app;
+	public function __construct(\Anchor\Mappers\Posts $posts,
+								\Anchor\Mappers\Pages $pages,
+								\Anchor\Mappers\Templates $templates,
+								\Anchor\Services\Registry $registry,
+								\Ship\Http\Request $request,
+								\Ship\Http\Response $response,
+								\Ship\Uri $uri) {
+		$this->posts = $posts;
+		$this->pages = $pages;
+		$this->templates = $templates;
+		$this->registry = $registry;
+		$this->request = $request;
+		$this->response = $response;
+		$this->uri = $uri;
 	}
 
 	protected function getSlug() {
-		return substr(strrchr($this->app['request']->getUri(), '/'), 1);
+		return substr(strrchr($this->request->getUri(), '/'), 1);
 	}
 
 	protected function getCurrentPage() {
-		if($this->app['request']->getUri() == '/') {
-			return $this->app['pages']->home();
+		if($this->request->getUri() == '/') {
+			return $this->pages->home();
 		}
 
 		$slug = $this->getSlug();
-		$query = $this->app['pages']->where('slug', '=', $slug);
+		$query = $this->pages->where('slug', '=', $slug);
 
-		if($page = $this->app['pages']->fetch($query)) {
+		if($page = $this->pages->fetch($query)) {
 			return $page;
 		}
 
@@ -42,24 +60,24 @@ class Base {
 	}
 
 	protected function getTemplate($name, $slug = '') {
-		if(strlen($slug) and $this->app['templates']->exists($name . '-' . $slug)) {
-			return $this->app['templates']->find($name . '-' . $slug);
+		if(strlen($slug) and $this->templates->exists($name . '-' . $slug)) {
+			return $this->templates->find($name . '-' . $slug);
 		}
 
-		if($this->app['templates']->exists($name)) {
-			return $this->app['templates']->find($name);
+		if($this->templates->exists($name)) {
+			return $this->templates->find($name);
 		}
 
 		throw new ErrorException('Template not found');
 	}
 
 	protected function getLayout($name) {
-		if($this->app['templates']->exists('layout-' . $name)) {
-			return $this->app['templates']->find('layout-' . $name);
+		if($this->templates->exists('layout-' . $name)) {
+			return $this->templates->find('layout-' . $name);
 		}
 
-		if($this->app['templates']->exists('layout')) {
-			return $this->app['templates']->find('layout');
+		if($this->templates->exists('layout')) {
+			return $this->templates->find('layout');
 		}
 	}
 
@@ -80,13 +98,13 @@ class Base {
 		return $view->render();
 	}
 
-	public function notFound($title = 'Resource Not Found') {
-		$page = $this->app['pages']->home();
-		$this->app['registry']->put('page', $page);
+	public function notFound($title = 'Not Found') {
+		$page = $this->pages->home();
+		$this->registry->put('page', $page);
 
 		$html = $this->renderTemplate('404', '', array('message' => $title));
 
-		return $this->app['response']->setStatusCode(404)->setBody($html);
+		return $this->response->setStatusCode(404)->setBody($html);
 	}
 
 }

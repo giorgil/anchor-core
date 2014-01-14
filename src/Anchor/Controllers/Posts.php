@@ -12,7 +12,7 @@ class Posts extends Base {
 	public function index() {
 		$page = $this->getCurrentPage();
 
-		$this->app['registry']->put('page', $page);
+		$this->registry->put('page', $page);
 
 		return $this->renderTemplate('posts', $page->slug);
 	}
@@ -20,7 +20,7 @@ class Posts extends Base {
 	public function category() {
 		$page = $this->getCurrentPage();
 
-		$this->app['registry']->put('page', $page);
+		$this->registry->put('page', $page);
 
 		return $this->renderTemplate('posts', $page->slug);
 	}

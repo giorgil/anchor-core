@@ -11,26 +11,50 @@ use Anchor\Models\Page;
 
 class Pages extends Base {
 
+	protected $input;
+	protected $pages;
+	protected $messages;
+	protected $csrf;
+	protected $response;
+	protected $uri;
+	protected $nav;
+
+	public function __construct(\Anchor\Mappers\Pages $pages,
+								\Anchor\Services\Messages $messages,
+								\Anchor\Services\Csrf $csrf,
+								\Anchor\Services\Nav $nav,
+								\Ship\Input $input,
+								\Ship\Http\Response $response,
+								\Ship\Uri $uri) {
+		$this->input = $input;
+		$this->pages = $pages;
+		$this->messages = $messages;
+		$this->csrf = $csrf;
+		$this->response = $response;
+		$this->uri = $uri;
+		$this->nav = $nav;
+	}
+
 	public function index() {
 		$perpage = 10;
-		$page = $this->app['input']->filter('page', 1, FILTER_SANITIZE_NUMBER_INT);
+		$page = $this->input->filter('page', 1, FILTER_SANITIZE_NUMBER_INT);
 		$offset = ($page - 1) * $perpage;
 
 		// @todo: check for page overflow
 		// @todo: check if category exists
 
-		$vars['pages'] = $this->app['pages']->skip($offset)->take($perpage)->all();
+		$vars['pages'] = $this->pages->skip($offset)->take($perpage)->all();
 		$vars['title'] = 'Pages';
 
-		$vars['messages'] = $this->app['messages']->render();
-		$vars['token'] = $this->app['csrf']->token();
+		$vars['messages'] = $this->messages->render();
+		$vars['token'] = $this->csrf->token();
 
 		return $this->getCommonView('pages/index.phtml', $vars)->render();
 	}
 
 	public function create() {
-		$vars['messages'] = $this->app['messages']->render();
-		$vars['token'] = $this->app['csrf']->token();
+		$vars['messages'] = $this->messages->render();
+		$vars['token'] = $this->csrf->token();
 
 		$vars['title'] = 'Create Page';
 		$vars['statuses'] = array('published', 'draft', 'archived');
@@ -46,9 +70,9 @@ class Pages extends Base {
 
 		$page->exchangeArray($values);
 
-		$this->app['pages']->save($page);
+		$this->pages->save($page);
 
-		return $this->app['response']->redirect($this->app['uri']->to('admin/pages'));
+		return $this->response->redirect($this->uri->to('admin/pages'));
 	}
 
 	public function show() {}
@@ -59,16 +83,16 @@ class Pages extends Base {
 		$id = $params[0];
 
 		// find post
-		$page = $this->app['pages']->where('id', '=', $id)->fetch();
+		$page = $this->pages->where('id', '=', $id)->fetch();
 
 		if(null === $page) {
-			$this->app['messages']->error('Page not found');
+			$this->messages->error('Page not found');
 
-			return $this->app['response']->redirect($this->app['uri']->to('admin/pages'));
+			return $this->response->redirect($this->uri->to('admin/pages'));
 		}
 
-		$vars['messages'] = $this->app['messages']->render();
-		$vars['token'] = $this->app['csrf']->token();
+		$vars['messages'] = $this->messages->render();
+		$vars['token'] = $this->csrf->token();
 
 		$vars['title'] = 'Editing &ldquo;' . $page->title . '&rdquo;';
 		$vars['page'] = $page;
@@ -83,17 +107,17 @@ class Pages extends Base {
 		$id = $params[0];
 
 		// find post
-		$page = $app['pages']->where('id', '=', $id)->fetch();
+		$page = $this->pages->where('id', '=', $id)->fetch();
 
 		if(null === $page) {
-			$app['messages']->error('Page not found');
+			$this->messages->error('Page not found');
 
-			return $app['response']->redirect($app['uri']->to('admin/pages'));
+			return $this->response->redirect($this->uri->to('admin/pages'));
 		}
 
-		$app['messages']->info('Page updated');
+		$this->messages->info('Page updated');
 
-		return $this->app['response']->redirect($this->app['uri']->to('admin/pages'));
+		return $this->response->redirect($this->uri->to('admin/pages'));
 	}
 
 	public function destroy() {
@@ -101,9 +125,9 @@ class Pages extends Base {
 		$params = $route->getParams();
 		$id = $params[0];
 
-		$this->app['messages']->info('Page deleted');
+		$this->messages->info('Page deleted');
 
-		return $this->app['response']->redirect($this->app['uri']->to('admin/pages'));
+		return $this->response->redirect($this->uri->to('admin/pages'));
 	}
 
 }

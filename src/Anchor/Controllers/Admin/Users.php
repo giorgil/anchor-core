@@ -9,41 +9,58 @@
 
 class Users extends Base {
 
+	protected $auth;
+	protected $input;
+	protected $pages;
+	protected $messages;
+	protected $csrf;
+	protected $response;
+	protected $uri;
+	protected $nav;
+
+	public function __construct(\Anchor\Services\Auth $auth,
+								\Anchor\Services\Messages $messages,
+								\Anchor\Services\Csrf $csrf,
+								\Anchor\Services\Nav $nav,
+								\Ship\Input $input,
+								\Ship\Http\Response $response,
+								\Ship\Uri $uri) {
+		$this->auth = $auth;
+		$this->input = $input;
+		$this->messages = $messages;
+		$this->csrf = $csrf;
+		$this->response = $response;
+		$this->uri = $uri;
+		$this->nav = $nav;
+	}
+
 	public function login() {
 		// redirect valid sessions
-		if( ! $this->app['auth']->guest()) {
-			return $this->app['response']->redirect($this->app['uri']->to('admin/posts'));
+		if( ! $this->auth->guest()) {
+			return $this->response->redirect($this->uri->to('admin/posts'));
 		}
 
-		// layout
-		$view = $this->getLayout();
-		$view->assign('title', 'Login');
-
-		// body
-		$vars['messages'] = $this->app['messages']->render();
-		$vars['token'] = $this->app['csrf']->token();
-		$vars['action'] = $this->app['uri']->to('admin/login/attempt');
+		$vars['messages'] = $this->messages->render();
+		$vars['token'] = $this->csrf->token();
+		$vars['action'] = $this->uri->to('admin/login/attempt');
 		$vars['user'] = '';
 
-		$body = $this->getView('login.phtml', $vars);
-		$view->nest('body', $body);
-
-		return $view->render();
+		return $this->getCommonView('login.phtml', $vars)->render();
 	}
 
 	public function attempt() {
-		$attempt = $this->app['auth']->attempt(
-			$this->app['input']->filter('user', '', FILTER_SANITIZE_STRING),
-			$this->app['input']->get('pass')
+		$attempt = $this->auth->attempt(
+			$this->input->filter('user', '', FILTER_SANITIZE_STRING),
+			$this->input->get('pass')
 		);
 
 		if( ! $attempt) {
-			$this->app['messages']->error('Invalid Login Details');
+			$this->messages->error('Invalid Login Details');
 
-			return $this->app['response']->redirect($this->app['uri']->to('admin/login'));
+			return $this->response->redirect($this->uri->to('admin/login'));
 		}
 
-		return $this->app['response']->redirect($this->app['uri']->to('admin/posts'));
+		return $this->response->redirect($this->uri->to('admin/posts'));
 	}
 
 }

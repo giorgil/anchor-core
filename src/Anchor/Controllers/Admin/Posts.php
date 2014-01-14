@@ -11,40 +11,70 @@ use Anchor\Models\Post;
 
 class Posts extends Base {
 
+	protected $input;
+	protected $posts;
+	protected $categories;
+	protected $form;
+	protected $messages;
+	protected $csrf;
+	protected $response;
+	protected $uri;
+	protected $nav;
+
+	public function __construct(\Anchor\Mappers\Posts $posts,
+								\Anchor\Mappers\Categories $categories,
+								\Anchor\Forms\Post $form,
+								\Anchor\Services\Messages $messages,
+								\Anchor\Services\Csrf $csrf,
+								\Anchor\Services\Nav $nav,
+								\Ship\Input $input,
+								\Ship\Http\Response $response,
+								\Ship\Uri $uri) {
+		$this->input = $input;
+		$this->posts = $posts;
+		$this->categories = $categories;
+		$this->form = $form;
+		$this->messages = $messages;
+		$this->csrf = $csrf;
+		$this->response = $response;
+		$this->uri = $uri;
+		$this->nav = $nav;
+	}
+
 	public function index() {
 		$perpage = 10;
-		$page = $this->app['input']->filter('page', 1, FILTER_SANITIZE_NUMBER_INT);
-		$category = $this->app['input']->filter('category', 0, FILTER_SANITIZE_NUMBER_INT);
+		$page = $this->input->filter('page', 1, FILTER_SANITIZE_NUMBER_INT);
+		$category = $this->input->filter('category', 0, FILTER_SANITIZE_NUMBER_INT);
 		$offset = ($page - 1) * $perpage;
 
 		// @todo: check for page overflow
 		// @todo: check if category exists
 
 		if($category) {
-			$vars['posts'] = $this->app['posts']->where('category', '=', $category)
+			$vars['posts'] = $this->posts->where('category', '=', $category)
 				->skip($offset)->take($perpage)->all();
 		}
 		else {
-			$vars['posts'] = $this->app['posts']->skip($offset)->take($perpage)->all();
+			$vars['posts'] = $this->posts->skip($offset)->take($perpage)->all();
 		}
 
 		$vars['title'] = 'Posts';
-		$vars['categories'] = $this->app['categories']->all();
+		$vars['categories'] = $this->categories->all();
 
-		$vars['messages'] = $this->app['messages']->render();
-		$vars['token'] = $this->app['csrf']->token();
+		$vars['messages'] = $this->messages->render();
+		$vars['token'] = $this->csrf->token();
 
 		return $this->getCommonView('posts/index.phtml', $vars)->render();
 	}
 
 	public function create() {
 		// body
-		$vars['messages'] = $this->app['messages']->render();
-		$vars['token'] = $this->app['csrf']->token();
+		$vars['messages'] = $this->messages->render();
+		$vars['token'] = $this->csrf->token();
 
 		$vars['title'] = 'Create Post';
 		$vars['post'] = $post;
-		$vars['categories'] = $this->app['categories']->all();
+		$vars['categories'] = $this->categories->all();
 		$vars['statuses'] = array('published', 'draft', 'archived');
 
 		return $this->getCommonView('posts/create.phtml', $vars)->render();
@@ -58,9 +88,9 @@ class Posts extends Base {
 
 		$post->exchangeArray($values);
 
-		$this->app['posts']->save($post);
+		$this->posts->save($post);
 
-		return $this->app['response']->redirect($this->app['uri']->to('admin/posts'));
+		return $this->response->redirect($this->uri->to('admin/posts'));
 	}
 
 	public function show() {}
@@ -71,25 +101,25 @@ class Posts extends Base {
 		$id = $params[0];
 
 		// find post
-		$post = $this->app['posts']->where('id', '=', $id)->fetch();
+		$post = $this->posts->where('id', '=', $id)->fetch();
 
 		if(null === $post) {
-			$this->app['messages']->error('Post not found');
+			$this->messages->error('Post not found');
 
-			return $this->app['response']->redirect($this->app['uri']->to('admin/posts'));
+			return $this->response->redirect($this->uri->to('admin/posts'));
 		}
 
 		// body
-		$vars['messages'] = $this->app['messages']->render();
-		$vars['token'] = $this->app['csrf']->token();
+		$vars['messages'] = $this->messages->render();
+		$vars['token'] = $this->csrf->token();
 
 		$vars['title'] = 'Editing &ldquo;' . $post->title . '&rdquo;';
 		$vars['post'] = $post;
-		$vars['categories'] = $this->app['categories']->all();
+		$vars['categories'] = $this->categories->all();
 		$vars['statuses'] = array('published', 'draft', 'archived');
 
-		$vars['form'] = $this->app['adminPostForm'];
-		$vars['form']->setAttr('action', $this->app['uri']->to('admin/posts/'.$id.'/update'));
+		$vars['form'] = $this->form;
+		$vars['form']->setAttr('action', $this->uri->to('admin/posts/'.$id.'/update'));
 		$vars['form']->setAttr('method', 'POST');
 
 		return $this->getCommonView('posts/edit.phtml', $vars)->render();
@@ -101,17 +131,17 @@ class Posts extends Base {
 		$id = $params[0];
 
 		// find post
-		$post = $app['posts']->where('id', '=', $id)->fetch();
+		$post = $this->posts->where('id', '=', $id)->fetch();
 
 		if(null === $post) {
-			$app['messages']->error('Post not found');
+			$this->messages->error('Post not found');
 
-			return $app['response']->redirect($app['uri']->to('admin/posts'));
+			return $this->response->redirect($uri->to('admin/posts'));
 		}
 
-		$app['messages']->info('Post updated');
+		$this->messages->info('Post updated');
 
-		return $app['response']->redirect($app['uri']->to('admin/posts'));
+		return $this->response->redirect($this->uri->to('admin/posts'));
 	}
 
 	public function destroy() {
@@ -119,9 +149,9 @@ class Posts extends Base {
 		$params = $route->getParams();
 		$id = $params[0];
 
-		$app['messages']->info('Post deleted');
+		$this->messages->info('Post deleted');
 
-		return $app['response']->redirect($app['uri']->to('admin/posts'));
+		return $this->response->redirect($this->uri->to('admin/posts'));
 	}
 
 }

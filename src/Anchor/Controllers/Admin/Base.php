@@ -11,16 +11,29 @@ use Ship\View;
 
 class Base {
 
-	protected $app;
+	protected $viewpath;
 
-	public function __construct($app) {
-		$this->app = $app;
-		$this->viewpath = __DIR__ . '/../../../../views';
+	protected $nav;
+
+	protected $uri;
+
+	public function __construct(\Anchor\Services\Nav $nav,
+								\Ship\Uri $uri) {
+		$this->nav = $nav;
+		$this->uri = $uri;
+	}
+
+	public function getViewPath() {
+		return $this->viewpath;
+	}
+
+	public function setViewPath($path) {
+		$this->viewpath = realpath($path);
 	}
 
 	protected function getView($template, array $vars = array()) {
-		$view = new View($this->viewpath . '/' . ltrim($template, '/'), $vars);
-		$view->setHelper('uri', $this->app['uri']);
+		$view = new View($this->getViewPath() . '/' . ltrim($template, '/'), $vars);
+		$view->setHelper('uri', $this->uri);
 
 		return $view;
 	}
@@ -34,18 +47,13 @@ class Base {
 	}
 
 	protected function getCommonView($template, array $vars = array()) {
-		$layout = $this->getLayout($vars);
+		$menu = $this->getPartial('menu.phtml');
+		$menu->assign('nav', $this->nav);
 
 		$main = $this->getView($template, $vars);
-
-		$menu = $this->getPartial('menu.phtml');
-		$menu->assign('nav', $this->app['nav']);
-
 		$main->nest('menu', $menu);
 
-		$layout->nest('body', $main);
-
-		return $layout;
+		return $this->getLayout($vars)->nest('body', $main);
 	}
 
 }

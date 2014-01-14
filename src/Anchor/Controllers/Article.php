@@ -15,25 +15,26 @@ class Article extends Base {
 		$params = $route->getParams();
 		$id = $params[0];
 
-		if($article = $this->app['posts']->find($id)) {
-			$uri = $this->app['pages']->posts()->uri() . '/' . $article->uri();
-			return $this->app['response']->setStatusCode(302)->setHeader('location', $uri);
+		if($article = $this->posts->find($id)) {
+			$uri = $this->uri->to($this->pages->posts()->uri() . '/' . $article->uri());
+
+			return $this->response->setStatusCode(302)->setHeader('location', $uri);
 		}
 
 		throw new HttpNotFound('Post ID not found');
 	}
 
 	public function view($request, $route) {
-		$page = $this->app['pages']->posts();
+		$page = $this->pages->posts();
 
 		$params = $route->getParams();
 		$slug = $params[0];
 
-		$article = $this->app['posts']->fetch($this->app['posts']->where('slug', '=', $slug));
+		$article = $this->posts->fetch($this->posts->where('slug', '=', $slug));
 
 		if($article) {
-			$this->app['registry']->put('article', $article);
-			$this->app['registry']->put('page', $page);
+			$this->registry->put('article', $article);
+			$this->registry->put('page', $page);
 
 			return $this->renderTemplate('article', $article->slug);
 		}
