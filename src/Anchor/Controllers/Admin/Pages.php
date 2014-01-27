@@ -18,6 +18,7 @@ class Pages extends Base {
 	protected $response;
 	protected $uri;
 	protected $nav;
+	protected $lang;
 
 	public function __construct(\Anchor\Mappers\Pages $pages,
 								\Anchor\Services\Messages $messages,
@@ -25,6 +26,7 @@ class Pages extends Base {
 								\Anchor\Services\Nav $nav,
 								\Ship\Input $input,
 								\Ship\Http\Response $response,
+								\Ship\I18n $lang,
 								\Ship\Uri $uri) {
 		$this->input = $input;
 		$this->pages = $pages;
@@ -33,6 +35,7 @@ class Pages extends Base {
 		$this->response = $response;
 		$this->uri = $uri;
 		$this->nav = $nav;
+		$this->lang = $lang;
 	}
 
 	public function index() {

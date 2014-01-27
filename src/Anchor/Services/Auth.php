@@ -7,7 +7,7 @@
  * @license		http://opensource.org/licenses/GPL-3.0
  */
 
-use Ship\Contracts\SessionInterface;
+use Ship\Session\Contracts\SessionInterface;
 
 class Auth {
 
@@ -37,6 +37,7 @@ class Auth {
 		if(null !== $user) {
 			// check password hash
 			if(password_verify($pass, $user->password)) {
+				$this->session->regenerate(true);
 				$this->session->put('user', $user->id);
 				return true;
 			}

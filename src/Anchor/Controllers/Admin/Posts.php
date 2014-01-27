@@ -20,6 +20,7 @@ class Posts extends Base {
 	protected $response;
 	protected $uri;
 	protected $nav;
+	protected $lang;
 
 	public function __construct(\Anchor\Mappers\Posts $posts,
 								\Anchor\Mappers\Categories $categories,
@@ -29,6 +30,7 @@ class Posts extends Base {
 								\Anchor\Services\Nav $nav,
 								\Ship\Input $input,
 								\Ship\Http\Response $response,
+								\Ship\I18n $lang,
 								\Ship\Uri $uri) {
 		$this->input = $input;
 		$this->posts = $posts;
@@ -39,6 +41,7 @@ class Posts extends Base {
 		$this->response = $response;
 		$this->uri = $uri;
 		$this->nav = $nav;
+		$this->lang = $lang;
 	}
 
 	public function index() {

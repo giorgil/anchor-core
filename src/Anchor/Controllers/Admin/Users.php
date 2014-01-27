@@ -9,6 +9,7 @@
 
 class Users extends Base {
 
+	protected $users;
 	protected $auth;
 	protected $input;
 	protected $pages;
@@ -17,14 +18,18 @@ class Users extends Base {
 	protected $response;
 	protected $uri;
 	protected $nav;
+	protected $lang;
 
-	public function __construct(\Anchor\Services\Auth $auth,
+	public function __construct(\Anchor\Mappers\Users $users,
+								\Anchor\Services\Auth $auth,
 								\Anchor\Services\Messages $messages,
 								\Anchor\Services\Csrf $csrf,
 								\Anchor\Services\Nav $nav,
 								\Ship\Input $input,
 								\Ship\Http\Response $response,
+								\Ship\I18n $lang,
 								\Ship\Uri $uri) {
+		$this->users = $users;
 		$this->auth = $auth;
 		$this->input = $input;
 		$this->messages = $messages;
@@ -32,6 +37,17 @@ class Users extends Base {
 		$this->response = $response;
 		$this->uri = $uri;
 		$this->nav = $nav;
+		$this->lang = $lang;
+	}
+
+	public function index() {
+		$vars['title'] = 'Users';
+		$vars['users'] = $this->users->all();
+
+		$vars['messages'] = $this->messages->render();
+		$vars['token'] = $this->csrf->token();
+
+		return $this->getCommonView('users/index.phtml', $vars)->render();
 	}
 
 	public function login() {

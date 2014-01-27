@@ -14,12 +14,14 @@ class Base {
 	protected $viewpath;
 
 	protected $nav;
-
 	protected $uri;
+	protected $lang;
 
 	public function __construct(\Anchor\Services\Nav $nav,
+								\Ship\I18n $lang,
 								\Ship\Uri $uri) {
 		$this->nav = $nav;
+		$this->lang = $lang;
 		$this->uri = $uri;
 	}
 
@@ -33,6 +35,7 @@ class Base {
 
 	protected function getView($template, array $vars = array()) {
 		$view = new View($this->getViewPath() . '/' . ltrim($template, '/'), $vars);
+		$view->setHelper('lang', $this->lang);
 		$view->setHelper('uri', $this->uri);
 
 		return $view;
@@ -47,6 +50,10 @@ class Base {
 	}
 
 	protected function getCommonView($template, array $vars = array()) {
+		if( ! isset($vars['title'])) {
+			$vars['title'] = 'Untitled';
+		}
+
 		$menu = $this->getPartial('menu.phtml');
 		$menu->assign('nav', $this->nav);
 

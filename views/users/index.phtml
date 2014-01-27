@@ -1,0 +1,20 @@
+<?php echo $menu; ?>
+
+<section class="list">
+	<ul>
+		<?php foreach($users as $user): ?>
+		<li>
+			<a href="<?php echo $this->getHelper('uri')->to('admin/users/'.$user->id.'/edit'); ?>">
+				<?php echo $user->real_name; ?>
+				<span><?php echo $user->role; ?></span>
+			</a>
+		</li>
+		<?php endforeach; ?>
+	</ul>
+</section>
+
+<main class="content">
+	<hgroup>
+		<h1><?php echo $title; ?></h1>
+	</hgroup>
+</main>

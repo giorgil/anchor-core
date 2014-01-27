@@ -7,7 +7,7 @@
  * @license		http://opensource.org/licenses/GPL-3.0
  */
 
-use Ship\Contracts\SessionInterface;
+use Ship\Session\Contracts\SessionInterface;
 
 class Csrf {
 
