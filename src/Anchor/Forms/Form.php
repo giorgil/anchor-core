@@ -18,6 +18,8 @@ abstract class Form implements IteratorAggregate {
 
 	protected $attr = array();
 
+	protected $values = array();
+
 	protected function getAttrString(array $options) {
 		$attr = array();
 
@@ -29,6 +31,8 @@ abstract class Form implements IteratorAggregate {
 	}
 
 	public function append($field) {
+		$field->setForm($this);
+
 		$this->fields[] = $field;
 	}
 
@@ -46,6 +50,10 @@ abstract class Form implements IteratorAggregate {
 
 	public function open(array $options = array()) {
 		$options = array_merge($this->attr, $options);
+
+		if( ! isset($options['accept-charset'])) {
+			$options['accept-charset'] = 'utf-8';
+		}
 
 		return sprintf('<form %s>', $this->getAttrString($options));
 	}
@@ -90,6 +98,22 @@ abstract class Form implements IteratorAggregate {
 		}
 
 		return $form;
+	}
+
+	public function setValues(array $values) {
+		$this->values = array_merge_recursive($this->values, $values);
+	}
+
+	public function getValues() {
+		return $this->values;
+	}
+
+	public function setValue($name, $value) {
+		$this->values[$name] = $value;
+	}
+
+	public function getValue($name, $default = null) {
+		return isset($this->values[$name]) ? $this->values[$name] : $default;
 	}
 
 }

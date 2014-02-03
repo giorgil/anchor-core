@@ -8,36 +8,30 @@
  */
 
 use ErrorException;
-
+use RuntimeException;
 use Anchor\Models\Page;
 use Anchor\Exceptions\HttpNotFound;
-
 use Ship\View;
 
-class Base {
+abstract class Base {
 
-	protected $posts;
-	protected $pages;
-	protected $templates;
-	protected $registry;
-	protected $request;
-	protected $response;
-	protected $uri;
+	protected $container;
 
-	public function __construct(\Anchor\Mappers\Posts $posts,
-								\Anchor\Mappers\Pages $pages,
-								\Anchor\Mappers\Templates $templates,
-								\Anchor\Services\Registry $registry,
-								\Ship\Http\Request $request,
-								\Ship\Http\Response $response,
-								\Ship\Uri $uri) {
-		$this->posts = $posts;
-		$this->pages = $pages;
-		$this->templates = $templates;
-		$this->registry = $registry;
-		$this->request = $request;
-		$this->response = $response;
-		$this->uri = $uri;
+	public function __get($property) {
+		// try container if one is set
+		if(isset($this->container[$property])) {
+			return $this->container[$property];
+		}
+
+		throw new RuntimeException(sprintf('Indefined property "%s"', $property));
+	}
+
+	public function setContainer($container) {
+		$this->container = $container;
+	}
+
+	public function getContainer() {
+		return $this->container;
 	}
 
 	protected function getSlug() {

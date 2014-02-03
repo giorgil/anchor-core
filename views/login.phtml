@@ -1,13 +1,19 @@
-<form method="post" action="<?php echo $action; ?>" accept-charset="utf-8">
-	<input name="token" type="hidden" value="<?php echo $token; ?>">
+<?php echo $form->open(); ?>
+	<?php echo $form->getElement('token')->getHtml(); ?>
 
 	<?php echo $messages; ?>
 
-	<p><label>Username
-	<input name="user" value="<?php echo $user; ?>" placeholder="Username"></label></p>
+	<img class="logo" alt="Anchor logo" src="/vendor/anchorcms/anchor-core/assets/img/logo-login.png">
 
-	<p><label>Password
-	<input name="pass" type="password" placeholder="Password"></label></p>
+	<p>
+		<?php echo $form->getElement('user')->getHtml(); ?>
+		<label for="<?php echo $form->getElement('user')->getName(); ?>" class="flaticon user-1"><?php echo $form->getElement('user')->getLabel(); ?>:</label>
+	</p>
 
-	<p><button class="btn" type="submit">Log In</button></p>
-</form>
+	<p>
+		<?php echo $form->getElement('pass')->getHtml(); ?>
+		<label for="<?php echo $form->getElement('pass')->getName(); ?>" class="flaticon password"><?php echo $form->getElement('pass')->getLabel(); ?>:</label>
+	</p>
+
+	<p><?php echo $form->getElement('login')->getHtml(); ?></p>
+<?php echo $form->close(); ?>

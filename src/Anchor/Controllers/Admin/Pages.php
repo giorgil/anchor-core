@@ -11,33 +11,6 @@ use Anchor\Models\Page;
 
 class Pages extends Base {
 
-	protected $input;
-	protected $pages;
-	protected $messages;
-	protected $csrf;
-	protected $response;
-	protected $uri;
-	protected $nav;
-	protected $lang;
-
-	public function __construct(\Anchor\Mappers\Pages $pages,
-								\Anchor\Services\Messages $messages,
-								\Anchor\Services\Csrf $csrf,
-								\Anchor\Services\Nav $nav,
-								\Ship\Input $input,
-								\Ship\Http\Response $response,
-								\Ship\I18n $lang,
-								\Ship\Uri $uri) {
-		$this->input = $input;
-		$this->pages = $pages;
-		$this->messages = $messages;
-		$this->csrf = $csrf;
-		$this->response = $response;
-		$this->uri = $uri;
-		$this->nav = $nav;
-		$this->lang = $lang;
-	}
-
 	public function index() {
 		$perpage = 10;
 		$page = $this->input->filter('page', 1, FILTER_SANITIZE_NUMBER_INT);
@@ -46,7 +19,7 @@ class Pages extends Base {
 		// @todo: check for page overflow
 		// @todo: check if category exists
 
-		$vars['pages'] = $this->pages->skip($offset)->take($perpage)->all();
+		$vars['pages'] = $this->pages->all($this->pages->skip($offset)->take($perpage));
 		$vars['title'] = 'Pages';
 
 		$vars['messages'] = $this->messages->render();

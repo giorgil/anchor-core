@@ -93,19 +93,35 @@ class ShipServiceProvider implements ProviderInterface {
 		 * Controllers
 		 */
 		$app['articleController'] = function($app) {
-			return $app->resolveWithDependencies('\\Anchor\\Controllers\\Article');
+			$controller = new \Anchor\Controllers\Article;
+
+			$controller->setContainer($app);
+
+			return $controller;
 		};
 
 		$app['pageController'] = function($app) {
-			return $app->resolveWithDependencies('\\Anchor\\Controllers\\Page');
+			$controller = new \Anchor\Controllers\Page;
+
+			$controller->setContainer($app);
+
+			return $controller;
 		};
 
 		$app['postsController'] = function($app) {
-			return $app->resolveWithDependencies('\\Anchor\\Controllers\\Posts');
+			$controller = new \Anchor\Controllers\Posts;
+
+			$controller->setContainer($app);
+
+			return $controller;
 		};
 
 		$app['feedController'] = function($app) {
-			return $app->resolveWithDependencies('\\Anchor\\Controllers\\Feeds');
+			$controller = new \Anchor\Controllers\Feeds;
+
+			$controller->setContainer($app);
+
+			return $controller;
 		};
 
 		/**
@@ -116,7 +132,9 @@ class ShipServiceProvider implements ProviderInterface {
 		};
 
 		$app['adminPostsController'] = function($app) {
-			$controller = $app->resolveWithDependencies('\\Anchor\\Controllers\\Admin\\Posts');
+			$controller = new \Anchor\Controllers\Admin\Posts;
+
+			$controller->setContainer($app);
 
 			$controller->setViewPath($app['anchorViewsPath']);
 
@@ -124,7 +142,9 @@ class ShipServiceProvider implements ProviderInterface {
 		};
 
 		$app['adminPagesController'] = function($app) {
-			$controller = $app->resolveWithDependencies('\\Anchor\\Controllers\\Admin\\Pages');
+			$controller = new \Anchor\Controllers\Admin\Pages;
+
+			$controller->setContainer($app);
 
 			$controller->setViewPath($app['anchorViewsPath']);
 
@@ -132,7 +152,9 @@ class ShipServiceProvider implements ProviderInterface {
 		};
 
 		$app['adminCategoriesController'] = function($app) {
-			$controller = $app->resolveWithDependencies('\\Anchor\\Controllers\\Admin\\Categories');
+			$controller = new \Anchor\Controllers\Admin\Categories;
+
+			$controller->setContainer($app);
 
 			$controller->setViewPath($app['anchorViewsPath']);
 
@@ -140,7 +162,9 @@ class ShipServiceProvider implements ProviderInterface {
 		};
 
 		$app['adminUsersController'] = function($app) {
-			$controller = $app->resolveWithDependencies('\\Anchor\\Controllers\\Admin\\Users');
+			$controller = new \Anchor\Controllers\Admin\Users;
+
+			$controller->setContainer($app);
 
 			$controller->setViewPath($app['anchorViewsPath']);
 

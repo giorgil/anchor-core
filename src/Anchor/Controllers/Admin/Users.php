@@ -9,37 +9,6 @@
 
 class Users extends Base {
 
-	protected $users;
-	protected $auth;
-	protected $input;
-	protected $pages;
-	protected $messages;
-	protected $csrf;
-	protected $response;
-	protected $uri;
-	protected $nav;
-	protected $lang;
-
-	public function __construct(\Anchor\Mappers\Users $users,
-								\Anchor\Services\Auth $auth,
-								\Anchor\Services\Messages $messages,
-								\Anchor\Services\Csrf $csrf,
-								\Anchor\Services\Nav $nav,
-								\Ship\Input $input,
-								\Ship\Http\Response $response,
-								\Ship\I18n $lang,
-								\Ship\Uri $uri) {
-		$this->users = $users;
-		$this->auth = $auth;
-		$this->input = $input;
-		$this->messages = $messages;
-		$this->csrf = $csrf;
-		$this->response = $response;
-		$this->uri = $uri;
-		$this->nav = $nav;
-		$this->lang = $lang;
-	}
-
 	public function index() {
 		$vars['title'] = 'Users';
 		$vars['users'] = $this->users->all();
@@ -56,10 +25,20 @@ class Users extends Base {
 			return $this->response->redirect($this->uri->to('admin/posts'));
 		}
 
+		$form = new \Anchor\Forms\Login;
+		$form->setAttr('method', 'post');
+		$form->setAttr('action', $this->uri->to('admin/login/attempt'));
+
+		$form->setValue('token', $this->csrf->token());
+
+		if($this->session->has('_prev_input')) {
+			$form->setValues($this->session->get('_prev_input'));
+			$this->session->remove('_prev_input');
+		}
+
 		$vars['messages'] = $this->messages->render();
-		$vars['token'] = $this->csrf->token();
-		$vars['action'] = $this->uri->to('admin/login/attempt');
-		$vars['user'] = '';
+		$vars['class'] = 'login';
+		$vars['form'] = $form;
 
 		return $this->getCommonView('login.phtml', $vars)->render();
 	}
@@ -72,6 +51,10 @@ class Users extends Base {
 
 		if( ! $attempt) {
 			$this->messages->error('Invalid Login Details');
+
+			$this->session->put('_prev_input', array(
+				'user' => $this->input->filter('user', '', FILTER_SANITIZE_STRING)
+			));
 
 			return $this->response->redirect($this->uri->to('admin/login'));
 		}

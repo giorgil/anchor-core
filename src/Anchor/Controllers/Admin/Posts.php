@@ -11,39 +11,6 @@ use Anchor\Models\Post;
 
 class Posts extends Base {
 
-	protected $input;
-	protected $posts;
-	protected $categories;
-	protected $form;
-	protected $messages;
-	protected $csrf;
-	protected $response;
-	protected $uri;
-	protected $nav;
-	protected $lang;
-
-	public function __construct(\Anchor\Mappers\Posts $posts,
-								\Anchor\Mappers\Categories $categories,
-								\Anchor\Forms\Post $form,
-								\Anchor\Services\Messages $messages,
-								\Anchor\Services\Csrf $csrf,
-								\Anchor\Services\Nav $nav,
-								\Ship\Input $input,
-								\Ship\Http\Response $response,
-								\Ship\I18n $lang,
-								\Ship\Uri $uri) {
-		$this->input = $input;
-		$this->posts = $posts;
-		$this->categories = $categories;
-		$this->form = $form;
-		$this->messages = $messages;
-		$this->csrf = $csrf;
-		$this->response = $response;
-		$this->uri = $uri;
-		$this->nav = $nav;
-		$this->lang = $lang;
-	}
-
 	public function index() {
 		$perpage = 10;
 		$page = $this->input->filter('page', 1, FILTER_SANITIZE_NUMBER_INT);
@@ -54,11 +21,11 @@ class Posts extends Base {
 		// @todo: check if category exists
 
 		if($category) {
-			$vars['posts'] = $this->posts->where('category', '=', $category)
-				->skip($offset)->take($perpage)->all();
+			$vars['posts'] = $this->posts->all($this->posts->where('category', '=', $category)
+				->skip($offset)->take($perpage));
 		}
 		else {
-			$vars['posts'] = $this->posts->skip($offset)->take($perpage)->all();
+			$vars['posts'] = $this->posts->all($this->posts->skip($offset)->take($perpage));
 		}
 
 		$vars['title'] = 'Posts';
@@ -96,21 +63,24 @@ class Posts extends Base {
 		return $this->response->redirect($this->uri->to('admin/posts'));
 	}
 
-	public function show() {}
-
 	public function edit($request, $route) {
 		// post ID
 		$params = $route->getParams();
 		$id = $params[0];
 
 		// find post
-		$post = $this->posts->where('id', '=', $id)->fetch();
+		$post = $this->posts->fetch($this->posts->where('id', '=', $id));
 
 		if(null === $post) {
 			$this->messages->error('Post not found');
 
 			return $this->response->redirect($this->uri->to('admin/posts'));
 		}
+
+		$form = new \Anchor\Forms\Post;
+		$form->setAttr('action', $this->uri->to('admin/posts/'.$id.'/update'));
+		$form->setAttr('method', 'POST');
+		$form->setValues($post->getArrayCopy());
 
 		// body
 		$vars['messages'] = $this->messages->render();
@@ -119,11 +89,8 @@ class Posts extends Base {
 		$vars['title'] = 'Editing &ldquo;' . $post->title . '&rdquo;';
 		$vars['post'] = $post;
 		$vars['categories'] = $this->categories->all();
-		$vars['statuses'] = array('published', 'draft', 'archived');
-
-		$vars['form'] = $this->form;
-		$vars['form']->setAttr('action', $this->uri->to('admin/posts/'.$id.'/update'));
-		$vars['form']->setAttr('method', 'POST');
+		$vars['posts'] = $this->posts->all();
+		$vars['form'] = $form;
 
 		return $this->getCommonView('posts/edit.phtml', $vars)->render();
 	}
@@ -134,7 +101,7 @@ class Posts extends Base {
 		$id = $params[0];
 
 		// find post
-		$post = $this->posts->where('id', '=', $id)->fetch();
+		$post = $this->posts->fetch($this->posts->where('id', '=', $id));
 
 		if(null === $post) {
 			$this->messages->error('Post not found');

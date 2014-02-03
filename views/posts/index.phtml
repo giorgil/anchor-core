@@ -2,6 +2,7 @@
 
 <section class="list">
 	<ul>
+		<li class="intro">Latest posts</li>
 		<?php foreach($posts as $post): ?>
 		<li>
 			<a href="<?php echo $this->getHelper('uri')->to('admin/posts/'.$post->id.'/edit'); ?>">

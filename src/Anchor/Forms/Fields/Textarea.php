@@ -14,16 +14,7 @@ class Textarea extends Field {
 	public function getHtml() {
 		$this->attr['name'] = $this->name;
 
-		if(isset($this->attr['value'])) {
-			$value = $this->attr['value'];
-
-			unset($this->attr['value']);
-		}
-		else {
-			$value = '';
-		}
-
-		return sprintf($this->prototype, $this->getAttrString($this->attr), $value);
+		return sprintf($this->prototype, $this->getAttrString($this->attr), $this->getValue());
 	}
 
 }

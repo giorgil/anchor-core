@@ -7,22 +7,30 @@
  * @license		http://opensource.org/licenses/GPL-3.0
  */
 
+use RuntimeException;
 use Ship\View;
 
-class Base {
+abstract class Base {
 
 	protected $viewpath;
 
-	protected $nav;
-	protected $uri;
-	protected $lang;
+	protected $container;
 
-	public function __construct(\Anchor\Services\Nav $nav,
-								\Ship\I18n $lang,
-								\Ship\Uri $uri) {
-		$this->nav = $nav;
-		$this->lang = $lang;
-		$this->uri = $uri;
+	public function __get($property) {
+		// try container if one is set
+		if(isset($this->container[$property])) {
+			return $this->container[$property];
+		}
+
+		throw new RuntimeException(sprintf('Indefined property "%s"', $property));
+	}
+
+	public function setContainer($container) {
+		$this->container = $container;
+	}
+
+	public function getContainer() {
+		return $this->container;
 	}
 
 	public function getViewPath() {
@@ -52,6 +60,10 @@ class Base {
 	protected function getCommonView($template, array $vars = array()) {
 		if( ! isset($vars['title'])) {
 			$vars['title'] = 'Untitled';
+		}
+
+		if( ! isset($vars['class'])) {
+			$vars['class'] = 'default';
 		}
 
 		$menu = $this->getPartial('menu.phtml');

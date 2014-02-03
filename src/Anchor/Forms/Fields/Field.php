@@ -15,6 +15,8 @@ abstract class Field {
 
 	protected $attr = array();
 
+	protected $form;
+
 	protected $prototype;
 
 	public function __construct($name, array $options = array(), array $attr = array()) {
@@ -39,6 +41,10 @@ abstract class Field {
 		return $this->name;
 	}
 
+	public function setForm($form) {
+		return $this->form = $form;
+	}
+
 	public function getOption($name, $default = '') {
 		return isset($this->options[$name]) ? $this->options[$name] : $default;
 	}
@@ -48,7 +54,7 @@ abstract class Field {
 	}
 
 	public function getValue($default = '') {
-		return $this->getOption('value', $default);
+		return $this->form->getValue($this->name, $default);
 	}
 
 }

@@ -98,3 +98,14 @@ function is_page() {
 
 	return $app['registry']->has('page');
 }
+
+/**
+ * Gettext fallback
+ *
+ * @return string
+ */
+if( ! function_exists('_')) {
+	function _($text) {
+		return $text;
+	}
+}

@@ -7,10 +7,12 @@
 		<meta name="viewport" content="width=device-width">
 
 		<link rel="stylesheet" type="text/css" href="/vendor/anchorcms/anchor-core/assets/css/styles.css">
-		<link rel="stylesheet" type="text/css" href="/vendor/anchorcms/anchor-core/assets/icons/stroke.css">
-		<link href="//fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet" type="text/css">
+
 	</head>
-	<body>
+	<?php printf('<body class="%s">', $class); ?>
 		<?php echo $body; ?>
+
+		<script src="/vendor/anchorcms/anchor-core/assets/js/jquery.js"></script>
+		<script src="/vendor/anchorcms/anchor-core/assets/js/retina.js"></script>
 	</body>
 </html>

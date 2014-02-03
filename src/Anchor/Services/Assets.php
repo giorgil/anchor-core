@@ -36,15 +36,11 @@ class Assets {
 	public function compile($src) {
 		foreach(new FilesystemIterator($src, FilesystemIterator::SKIP_DOTS) as $fileinfo) {
 			if($fileinfo->isFile()) {
-
 				$ext = pathinfo($fileinfo->getPathname(), PATHINFO_EXTENSION);
 
 				if($ext == 'less') {
-					$dest = $fileinfo->getPath() . '/../css';
-
-					if( ! is_dir($dest)) mkdir($dest, 0701, true);
-
-					$this->lessc->checkedCompile($fileinfo->getPathname(), $dest . '/' . $fileinfo->getBasename('.less') . '.css');
+					$this->lessc->checkedCompile($fileinfo->getPathname(),
+						$fileinfo->getPath() . '/' . $fileinfo->getBasename('.less') . '.css');
 				}
 			}
 			elseif($fileinfo->isDir()) {
