@@ -16,7 +16,9 @@ abstract class Form implements IteratorAggregate {
 
 	protected $fields = array();
 
-	protected $attr = array();
+	protected $attr = array(
+		'method' => 'POST'
+	);
 
 	protected $values = array();
 
@@ -33,7 +35,7 @@ abstract class Form implements IteratorAggregate {
 	public function append($field) {
 		$field->setForm($this);
 
-		$this->fields[] = $field;
+		$this->fields[$field->getName()] = $field;
 	}
 
 	public function setAttr($name, $value) {
@@ -101,7 +103,11 @@ abstract class Form implements IteratorAggregate {
 	}
 
 	public function setValues(array $values) {
-		$this->values = array_merge_recursive($this->values, $values);
+		foreach($values as $key => $value) {
+			if(isset($this->fields[$key])) {
+				$this->values[$key] = $value;
+			}
+		}
 	}
 
 	public function getValues() {
@@ -114,6 +120,14 @@ abstract class Form implements IteratorAggregate {
 
 	public function getValue($name, $default = null) {
 		return isset($this->values[$name]) ? $this->values[$name] : $default;
+	}
+
+	public function valid() {
+		return true;
+	}
+
+	public function getMessages() {
+		return array(array('title' => 'Please enetr a post title'));
 	}
 
 }

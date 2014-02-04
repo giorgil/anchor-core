@@ -7,7 +7,7 @@
  * @license		http://opensource.org/licenses/GPL-3.0
  */
 
-class Feeds extends Base {
+class Feeds extends Frontend {
 
 	public function rss() {
 		return 'rss';

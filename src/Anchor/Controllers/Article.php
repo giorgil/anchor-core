@@ -9,7 +9,7 @@
 
 use Anchor\Exceptions\HttpNotFound;
 
-class Article extends Base {
+class Article extends Frontend {
 
 	public function redirect($request, $route) {
 		$params = $route->getParams();

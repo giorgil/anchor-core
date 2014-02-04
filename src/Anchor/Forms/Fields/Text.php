@@ -14,7 +14,7 @@ class Text extends Field {
 	public function getHtml() {
 		$this->attr['name'] = $this->name;
 		$this->attr['type'] = 'text';
-		$this->attr['value'] = $this->getValue();
+		$this->attr['value'] = $this->getValue() ? $this->getValue() : $this->getOption('default');
 
 		return sprintf($this->prototype, $this->getAttrString($this->attr));
 	}

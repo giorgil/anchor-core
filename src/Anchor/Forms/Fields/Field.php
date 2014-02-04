@@ -57,4 +57,8 @@ abstract class Field {
 		return $this->form->getValue($this->name, $default);
 	}
 
+	public function setValue($value) {
+		return $this->form->setValue($this->name, $value);
+	}
+
 }

@@ -9,7 +9,7 @@
 
 use Anchor\Models\Page;
 
-class Pages extends Base {
+class Pages extends Backend {
 
 	public function index() {
 		$perpage = 10;

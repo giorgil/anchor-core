@@ -10,6 +10,7 @@
 use Anchor\Forms\Fields\Text;
 use Anchor\Forms\Fields\Textarea;
 use Anchor\Forms\Fields\Select;
+use Anchor\Forms\Fields\Hidden;
 use Anchor\Forms\Fields\Button;
 
 class Post extends Form {
@@ -20,14 +21,6 @@ class Post extends Form {
 				'label' => 'Title'
 			), array(
 				'placeholder' => 'Title'
-			)
-		));
-
-		$this->append(new Text('name',
-			array(
-				'label' => 'Name'
-			), array(
-				'placeholder' => 'Menu Name'
 			)
 		));
 
@@ -43,7 +36,15 @@ class Post extends Form {
 			array(
 				'label' => 'Markdown'
 			), array(
-				'spell' => 'off'
+				'spell' => 'off',
+				'placeholder' => 'Your pearls of wisdom ...'
+			)
+		));
+
+		$this->append(new Text('created',
+			array(
+				'label' => 'Created',
+				'default' => date('Y-m-d H:i:s')
 			)
 		));
 
@@ -53,6 +54,23 @@ class Post extends Form {
 				'options' => array_combine(
 					array('published', 'draft', 'archived'),
 					array('Published', 'Draft', 'Archived')
+				),
+			)
+		));
+
+		$this->append(new Select('category',
+			array(
+				'label' => 'Status',
+				'options' => array('Empty'),
+			)
+		));
+
+		$this->append(new Select('comments',
+			array(
+				'label' => 'Allow Comments',
+				'options' => array_combine(
+					array(0, 1),
+					array('Yes', 'No')
 				),
 			)
 		));

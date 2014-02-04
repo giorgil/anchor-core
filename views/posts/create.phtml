@@ -1,11 +1,36 @@
 <?php echo $menu; ?>
 
 <section class="list">
-
+	<h4 class="intro">Latest posts</h4>
+	<ul>
+		<?php foreach($posts as $post): ?>
+		<li>
+			<a href="<?php echo $this->getHelper('uri')->to('admin/posts/'.$post->id.'/edit'); ?>">
+				<?php echo $post->title; ?>
+				<time><?php echo date('jS M Y', strtotime($post->created)); ?></time>
+			</a>
+		</li>
+		<?php endforeach; ?>
+	</ul>
 </section>
+
+<?php echo $form->open(); ?>
 
 <main class="content">
 	<hgroup>
-		<h1><?php echo $title; ?></h1>
+		<h1><?php echo $form->getElement('title')->getHtml(); ?></h1>
+		<p><?php echo $form->getElement('save')->getHtml(); ?></p>
+		<a title="Edit custom fields" href="#opts" class="custom-fields btn subdued flaticon align-left-1">Custom Fields</a>
 	</hgroup>
+
+	<p class="markdown"><?php echo $form->getElement('markdown')->getHtml(); ?></p>
 </main>
+
+<section id="opts">
+	<?php foreach($form->getElementsExcept(array('title', 'markdown', 'save')) as $field): ?>
+	<p><label><?php echo $field->getLabel(); ?></label><br>
+	<?php echo $field->getHtml(); ?></p>
+	<?php endforeach; ?>
+</section>
+
+<?php echo $form->close(); ?>

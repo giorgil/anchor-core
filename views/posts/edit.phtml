@@ -1,8 +1,8 @@
 <?php echo $menu; ?>
 
 <section class="list">
+	<h4 class="intro">Latest posts</h4>
 	<ul>
-		<li class="intro">Latest posts</li>
 		<?php foreach($posts as $post): ?>
 		<li>
 			<a href="<?php echo $this->getHelper('uri')->to('admin/posts/'.$post->id.'/edit'); ?>">

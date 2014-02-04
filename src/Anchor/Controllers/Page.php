@@ -7,7 +7,7 @@
  * @license		http://opensource.org/licenses/GPL-3.0
  */
 
-class Page extends Base {
+class Page extends Frontend {
 
 	public function index() {
 		$page = $this->getCurrentPage();

@@ -19,4 +19,11 @@ class Post extends Record {
 		return $this->html;
 	}
 
+	public function getFilters() {
+		return array(
+			'title' => array('required', 'Post title is required'),
+			'html' => array('required', 'Post content is required')
+		);
+	}
+
 }

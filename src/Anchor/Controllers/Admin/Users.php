@@ -7,7 +7,7 @@
  * @license		http://opensource.org/licenses/GPL-3.0
  */
 
-class Users extends Base {
+class Users extends Backend {
 
 	public function index() {
 		$vars['title'] = 'Users';

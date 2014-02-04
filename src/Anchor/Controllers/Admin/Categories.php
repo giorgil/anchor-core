@@ -7,7 +7,7 @@
  * @license		http://opensource.org/licenses/GPL-3.0
  */
 
-class Categories extends Base {
+class Categories extends Backend {
 
 	public function index() {
 		$vars['title'] = 'Categories';

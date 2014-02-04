@@ -86,6 +86,12 @@ class ShipServiceProvider implements ProviderInterface {
 
 			return $nav;
 		};
+
+		$app['lang'] = function($app) {
+			$lang = $app['config']->get('app.language', 'en_GB');
+
+			return new \Anchor\Services\I18n($lang);
+		};
 	}
 
 	protected function registerControllers(Container $app) {

@@ -1,8 +1,8 @@
 <?php echo $menu; ?>
 
 <section class="list">
+	<h4 class="intro">Latest posts</h4>
 	<ul>
-		<li class="intro">Latest posts</li>
 		<?php foreach($posts as $post): ?>
 		<li>
 			<a href="<?php echo $this->getHelper('uri')->to('admin/posts/'.$post->id.'/edit'); ?>">
@@ -15,7 +15,6 @@
 </section>
 
 <main class="content">
-	<hgroup>
-		<h1><?php echo $title; ?></h1>
-	</hgroup>
+	<a class="btn top-right" href="<?php echo $this->getHelper('uri')->to('admin/posts/create'); ?>">New post</a>
+	<span class="empty-state flaticon feather-1">Click a post on the left to edit, or add a post at the top-right.</span>
 </main>

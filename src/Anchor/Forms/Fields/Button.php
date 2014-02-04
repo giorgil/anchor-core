@@ -12,10 +12,6 @@ class Button extends Field {
 	protected $prototype = '<button %s>%s</button>';
 
 	public function getHtml() {
-		if( ! isset($this->attr['name'])) {
-			$this->attr['name'] = $this->name;
-		}
-
 		if( ! isset($this->attr['type'])) {
 			$this->attr['type'] = 'submit';
 		}

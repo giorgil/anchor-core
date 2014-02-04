@@ -82,4 +82,14 @@ class Posts extends Base {
 			->order('created', 'desc'));
 	}
 
+	/**
+	 * Fetch a buffered array of latest posts
+	 *
+	 * @return object ArrayObject
+	 */
+	public function latest() {
+		return $this->all($this->query()
+			->order('created', 'desc'));
+	}
+
 }

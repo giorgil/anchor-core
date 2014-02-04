@@ -9,29 +9,11 @@
 
 use RuntimeException;
 use Ship\View;
+use Anchor\Controllers\Controller;
 
-abstract class Base {
+abstract class Backend extends Controller {
 
 	protected $viewpath;
-
-	protected $container;
-
-	public function __get($property) {
-		// try container if one is set
-		if(isset($this->container[$property])) {
-			return $this->container[$property];
-		}
-
-		throw new RuntimeException(sprintf('Indefined property "%s"', $property));
-	}
-
-	public function setContainer($container) {
-		$this->container = $container;
-	}
-
-	public function getContainer() {
-		return $this->container;
-	}
 
 	public function getViewPath() {
 		return $this->viewpath;

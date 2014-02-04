@@ -8,31 +8,11 @@
  */
 
 use ErrorException;
-use RuntimeException;
 use Anchor\Models\Page;
 use Anchor\Exceptions\HttpNotFound;
 use Ship\View;
 
-abstract class Base {
-
-	protected $container;
-
-	public function __get($property) {
-		// try container if one is set
-		if(isset($this->container[$property])) {
-			return $this->container[$property];
-		}
-
-		throw new RuntimeException(sprintf('Indefined property "%s"', $property));
-	}
-
-	public function setContainer($container) {
-		$this->container = $container;
-	}
-
-	public function getContainer() {
-		return $this->container;
-	}
+abstract class Frontend extends Controller {
 
 	protected function getSlug() {
 		return substr(strrchr($this->request->getUri(), '/'), 1);

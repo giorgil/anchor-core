@@ -26,7 +26,7 @@ $app['router']->add(new Route('admin/posts/create', array(
 	'controller' => array($app['adminPostsController'], 'create')
 )));
 
-$app['router']->add(new Route('admin/posts/save', array(
+$app['router']->add(new Route('admin/posts/store', array(
 	'conditions' => array($auth, $csrf),
 	'requirements' => array('method' => 'POST'),
 	'controller' => array($app['adminPostsController'], 'store')
