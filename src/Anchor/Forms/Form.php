@@ -122,10 +122,6 @@ abstract class Form implements IteratorAggregate {
 		return isset($this->values[$name]) ? $this->values[$name] : $default;
 	}
 
-	public function valid() {
-		return true;
-	}
-
 	public function getMessages() {
 		return array(array('title' => 'Please enetr a post title'));
 	}

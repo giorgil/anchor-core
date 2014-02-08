@@ -9,6 +9,7 @@
 
 use ArrayObject;
 use Anchor\Models\Post;
+use Anchor\Models\Category;
 use Anchor\Mappers\Categories;
 use Anchor\Mappers\Comments;
 use Anchor\Mappers\Users;
@@ -60,13 +61,19 @@ class Posts extends Base {
 		$post = new Post($row);
 
 		$categories = new Categories($this->query);
-		$post->category = $categories->find($post->category);
-		/*
-		$comments = new Comments($this->query);
-		$post->total_comments = $comments->where('status', '=', 'published')->count();
-		*/
+
+		if($category = $categories->find($post->category)) {
+			$post->setCategory($category);
+		}
+		else {
+			$post->setCategory($categories->fetch());
+		}
+
+		//$comments = new Comments($this->query);
+		//$post->total_comments = $comments->where('status', '=', 'published')->count();
+
 		$users = new Users($this->query);
-		$post->author = $users->find($post->author);
+		$post->setAuthor($users->find($post->author));
 
 		return $post;
 	}

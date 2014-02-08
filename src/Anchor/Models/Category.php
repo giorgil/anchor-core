@@ -9,4 +9,13 @@
 
 use Ship\Database\Record;
 
-class Category extends Record {}
+class Category extends Record {
+
+	protected $fields = array(
+		'id',
+		'title',
+		'slug',
+		'description',
+	);
+
+}

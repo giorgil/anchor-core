@@ -9,4 +9,16 @@
 
 use Ship\Database\Record;
 
-class Comment extends Record {}
+class Comment extends Record {
+
+	protected $fields = array(
+		'id',
+		'post',
+		'sttaus',
+		'date',
+		'name',
+		'email',
+		'text',
+	);
+
+}

@@ -8,8 +8,27 @@
  */
 
 use Ship\Database\Record;
+use Anchor\Services\Validator;
+use Anchor\Services\Contracts\Validatable;
 
-class Post extends Record {
+class Post extends Record implements Validatable {
+
+	protected $categoryModel;
+
+	protected $userModel;
+
+	protected $fields = array(
+		'id',
+		'title',
+		'slug',
+		'markdown',
+		'html',
+		'created',
+		'author',
+		'category',
+		'status',
+		'comments',
+	);
 
 	public function uri() {
 		return $this->slug;
@@ -19,11 +38,31 @@ class Post extends Record {
 		return $this->html;
 	}
 
-	public function getFilters() {
-		return array(
-			'title' => array('required', 'Post title is required'),
-			'html' => array('required', 'Post content is required')
-		);
+	public function setCategory($category) {
+		$this->categoryModel = $category;
+	}
+
+	public function getCategory() {
+		return $this->categoryModel;
+	}
+
+	public function setAuthor($user) {
+		$this->userModel = $user;
+	}
+
+	public function getAuthor() {
+		return $this->userModel;
+	}
+
+	public function getValidationRules(Validator $validator) {
+		$validator->addRule('title', function($value, &$message) {
+			if('' === $value) {
+				$message = 'Please enter a title';
+				return false;
+			}
+
+			return true;
+		});
 	}
 
 }

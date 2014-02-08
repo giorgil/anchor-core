@@ -9,4 +9,21 @@
 
 use Ship\Database\Record;
 
-class User extends Record {}
+class User extends Record {
+
+	protected $fields = array(
+		'id',
+		'username',
+		'password',
+		'email',
+		'real_name',
+		'bio',
+		'status',
+		'role',
+	);
+
+	protected $guarded = array(
+		'password',
+	);
+
+}

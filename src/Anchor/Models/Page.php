@@ -11,6 +11,20 @@ use Ship\Database\Record;
 
 class Page extends Record {
 
+	protected $fields = array(
+		'id',
+		'parent',
+		'slug',
+		'name',
+		'title',
+		'markdown',
+		'html',
+		'status',
+		'redirect',
+		'show_in_menu',
+		'menu_order',
+	);
+
 	public function uri() {
 		return $this->slug;
 	}

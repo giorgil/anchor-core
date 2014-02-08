@@ -6,7 +6,7 @@
  * @return string
  */
 function author() {
-	return article()->author;
+	return article()->getAuthor();
 }
 
 /**

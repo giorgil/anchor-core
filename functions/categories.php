@@ -34,7 +34,7 @@ function category() {
 	}
 
 	if($article = article()) {
-		return $article->category;
+		return $article->getCategory();
 	}
 }
 

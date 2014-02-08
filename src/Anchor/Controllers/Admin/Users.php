@@ -7,6 +7,8 @@
  * @license		http://opensource.org/licenses/GPL-3.0
  */
 
+use Anchor\Forms\Login as LoginForm;
+
 class Users extends Backend {
 
 	public function index() {
@@ -25,7 +27,7 @@ class Users extends Backend {
 			return $this->response->redirect($this->uri->to('admin/posts'));
 		}
 
-		$form = new \Anchor\Forms\Login;
+		$form = new LoginForm;
 		$form->setAttr('method', 'post');
 		$form->setAttr('action', $this->uri->to('admin/login/attempt'));
 
@@ -37,6 +39,7 @@ class Users extends Backend {
 		}
 
 		$vars['messages'] = $this->messages->render();
+		$vars['title'] = 'Login';
 		$vars['class'] = 'login';
 		$vars['form'] = $form;
 
