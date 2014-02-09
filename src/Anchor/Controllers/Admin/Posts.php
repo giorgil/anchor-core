@@ -84,16 +84,7 @@ class Posts extends Backend {
 			return $this->response->redirect($this->uri->to('admin/posts/create'));
 		}
 
-		if('' === $post->slug) {
-			$post->slug = $this->slugify->slugify($post->title);
-		}
-
-		$post->html = $this->markdown->parse($post->markdown);
-
-		$user = $this->auth->user();
-		$post->author = $user->id;
-
-		$this->posts->save($post);
+		$this->posts->publish($post, $this->slugify, $this->markdown, $this->auth->user());
 
 		$this->messages->info('Post created');
 
@@ -160,26 +151,28 @@ class Posts extends Backend {
 			return $this->response->redirect($this->uri->to('admin/posts/'.$post->id.'/edit'));
 		}
 
-		if('' === $post->slug) {
-			$post->slug = $this->slugify->slugify($post->title);
-		}
-
-		$post->html = $this->markdown->parse($post->markdown);
-
-		$user = $this->auth->user();
-		$post->author = $user->id;
-
-		$this->posts->save($post);
+		$this->posts->publish($post, $this->slugify, $this->markdown, $this->auth->user());
 
 		$this->messages->info('Post updated');
 
 		return $this->response->redirect($this->uri->to('admin/posts/'.$post->id.'/edit'));
 	}
 
-	public function destroy() {
+	public function destroy($request, $route) {
 		// post ID
 		$params = $route->getParams();
 		$id = $params[0];
+
+		// find post
+		$post = $this->posts->find($id);
+
+		if(null === $post) {
+			$this->messages->error('Post not found');
+
+			return $this->response->redirect($this->uri->to('admin/posts'));
+		}
+
+		$this->posts->delete($post);
 
 		$this->messages->info('Post deleted');
 

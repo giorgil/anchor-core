@@ -8,13 +8,13 @@ use Ship\Routing\Route;
 $app['router']->add(new Route('admin/posts/:id/edit', array(
 	'conditions' => array($auth, $csrf),
 	'requirements' => array('method' => 'GET'),
-	'controller' => array($app['adminPostsController'], 'edit')
+	'controller' => array($app['controllers']->backend('Posts', $app), 'edit')
 )));
 
 $app['router']->add(new Route('admin/posts/:id/update', array(
 	'conditions' => array($auth, $csrf),
 	'requirements' => array('method' => 'POST'),
-	'controller' => array($app['adminPostsController'], 'update')
+	'controller' => array($app['controllers']->backend('Posts', $app), 'update')
 )));
 
 /*
@@ -23,13 +23,13 @@ $app['router']->add(new Route('admin/posts/:id/update', array(
 $app['router']->add(new Route('admin/posts/create', array(
 	'conditions' => array($auth, $csrf),
 	'requirements' => array('method' => 'GET'),
-	'controller' => array($app['adminPostsController'], 'create')
+	'controller' => array($app['controllers']->backend('Posts', $app), 'create')
 )));
 
 $app['router']->add(new Route('admin/posts/store', array(
 	'conditions' => array($auth, $csrf),
 	'requirements' => array('method' => 'POST'),
-	'controller' => array($app['adminPostsController'], 'store')
+	'controller' => array($app['controllers']->backend('Posts', $app), 'store')
 )));
 
 /*
@@ -37,8 +37,8 @@ $app['router']->add(new Route('admin/posts/store', array(
  */
 $app['router']->add(new Route('admin/posts/:id/delete', array(
 	'conditions' => array($auth, $csrf),
-	'requirements' => array('method' => 'POST'),
-	'controller' => array($app['adminPostsController'], 'destroy')
+	//'requirements' => array('method' => 'POST'),
+	'controller' => array($app['controllers']->backend('Posts', $app), 'destroy')
 )));
 
 /*
@@ -47,5 +47,5 @@ $app['router']->add(new Route('admin/posts/:id/delete', array(
 $app['router']->add(new Route('admin/posts', array(
 	'conditions' => array($auth, $csrf),
 	'requirements' => array('method' => 'GET'),
-	'controller' => array($app['adminPostsController'], 'index')
+	'controller' => array($app['controllers']->backend('Posts', $app), 'index')
 )));

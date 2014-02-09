@@ -99,4 +99,23 @@ class Posts extends Base {
 			->order('created', 'desc'));
 	}
 
+	/**
+	 * Publish a post
+	 *
+	 * @param object
+	 * @param object
+	 * @param object
+	 * @param object
+	 */
+	public function publish($post, $slugify, $markdown, $user) {
+		if('' === $post->slug) {
+			$post->slug = $slugify->slugify($post->title);
+		}
+
+		$post->html = $markdown->parse($post->markdown);
+		$post->author = $user->id;
+
+		$this->save($post);
+	}
+
 }

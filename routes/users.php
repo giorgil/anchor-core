@@ -8,7 +8,7 @@ use Ship\Routing\Route;
 $app['router']->add(new Route('admin/users', array(
 	'conditions' => array($auth, $csrf),
 	'requirements' => array('method' => 'GET'),
-	'controller' => array($app['adminUsersController'], 'index')
+	'controller' => array($app['controllers']->backend('Users', $app), 'index')
 )));
 
 

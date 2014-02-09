@@ -1,0 +1,35 @@
+<?php echo $menu; ?>
+
+<section class="list">
+	<h4 class="intro">Extend</h4>
+	<ul>
+		<li>
+			<a href="<?php echo $this->getHelper('uri')->to('admin/extend/meta'); ?>">
+				Metadata
+				<span>Site Settings</span>
+			</a>
+		</li>
+		<li>
+			<a href="<?php echo $this->getHelper('uri')->to('admin/extend/variables'); ?>">
+				Variables
+				<span>Global Variables</span>
+			</a>
+		</li>
+		<li>
+			<a href="<?php echo $this->getHelper('uri')->to('admin/extend/fields'); ?>">
+				Fields
+				<span>Post and Page Custom Fields</span>
+			</a>
+		</li>
+		<li>
+			<a href="<?php echo $this->getHelper('uri')->to('admin/extend/plugins'); ?>">
+				Plugins
+				<span>Bells and whistles</span>
+			</a>
+		</li>
+	</ul>
+</section>
+
+<main class="content">
+	<span class="empty-state flaticon feather-1">Woop.</span>
+</main>

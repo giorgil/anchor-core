@@ -8,6 +8,8 @@
  */
 
 use Anchor\Models\Page;
+use Anchor\Forms\Page as PageForm;
+use Anchor\Services\Validator;
 
 class Pages extends Backend {
 
@@ -29,61 +31,76 @@ class Pages extends Backend {
 	}
 
 	public function create() {
+		$form = new PageForm;
+		$form->setAttr('action', $this->uri->to('admin/pages/store'));
+		$form->setAttr('method', 'POST');
+
 		$vars['messages'] = $this->messages->render();
 		$vars['token'] = $this->csrf->token();
 
 		$vars['title'] = 'Create Page';
-		$vars['statuses'] = array('published', 'draft', 'archived');
+		$vars['pages'] = $this->pages->all();
+		$vars['form'] = $form;
 
 		return $this->getCommonView('pages/create.phtml', $vars)->render();
 	}
 
 	public function store() {
 		$page = new Page;
+		$validator = new Validator;
 
-		// filter and validate
-		$values = array();
+		$page->hydrate($this->input->getArrayCopy());
 
-		$page->exchangeArray($values);
+		$validator->validate($page);
 
-		$this->pages->save($page);
+		if( ! $validator->isValid()) {
+			//$this->session->flash($this->input->getArrayCopy());
 
-		return $this->response->redirect($this->uri->to('admin/pages'));
+			$this->messages->add('error', $validator->getMessages());
+
+			return $this->response->redirect($this->uri->to('admin/pages/create'));
+		}
+
+		$this->pages->publish($page, $this->slugify, $this->markdown);
+
+		$this->messages->info('Page created');
+
+		return $this->response->redirect($this->uri->to('admin/pages/'.$page->id.'/edit'));
 	}
 
-	public function show() {}
-
 	public function edit($request, $route) {
-		// post ID
 		$params = $route->getParams();
 		$id = $params[0];
 
-		// find post
-		$page = $this->pages->where('id', '=', $id)->fetch();
+		$page = $this->pages->find($id);
 
 		if(null === $page) {
 			$this->messages->error('Page not found');
 
 			return $this->response->redirect($this->uri->to('admin/pages'));
 		}
+
+		$form = new PageForm;
+		$form->setAttr('action', $this->uri->to('admin/pages/'.$page->id.'/update'));
+		$form->setAttr('method', 'POST');
+		$form->setValues($page->toArray());
 
 		$vars['messages'] = $this->messages->render();
 		$vars['token'] = $this->csrf->token();
 
 		$vars['title'] = 'Editing &ldquo;' . $page->title . '&rdquo;';
 		$vars['page'] = $page;
-		$vars['statuses'] = array('published', 'draft', 'archived');
+		$vars['pages'] = $this->pages->all();
+		$vars['form'] = $form;
 
 		return $this->getCommonView('pages/edit.phtml', $vars)->render();
 	}
 
 	public function update($request, $route) {
-		// post ID
 		$params = $route->getParams();
 		$id = $params[0];
 
-		// find post
-		$page = $this->pages->where('id', '=', $id)->fetch();
+		$page = $this->pages->find($id);
 
 		if(null === $page) {
 			$this->messages->error('Page not found');
@@ -91,9 +108,26 @@ class Pages extends Backend {
 			return $this->response->redirect($this->uri->to('admin/pages'));
 		}
 
+		// validate form input
+		$validator = new Validator;
+
+		$page->hydrate($this->input->getArrayCopy());
+
+		$validator->validate($page);
+
+		if( ! $validator->isValid()) {
+			//$this->session->flash($this->input->getArrayCopy());
+
+			$this->messages->add('error', $validator->getMessages());
+
+			return $this->response->redirect($this->uri->to('admin/pages/'.$page->id.'/edit'));
+		}
+
+		$this->pages->publish($page, $this->slugify, $this->markdown);
+
 		$this->messages->info('Page updated');
 
-		return $this->response->redirect($this->uri->to('admin/pages'));
+		return $this->response->redirect($this->uri->to('admin/pages/'.$page->id.'/edit'));
 	}
 
 	public function destroy() {

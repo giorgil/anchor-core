@@ -46,4 +46,21 @@ class Pages extends Base {
 		return new Page($row);
 	}
 
+	/**
+	 * Publish a page
+	 *
+	 * @param object
+	 * @param object
+	 * @param object
+	 */
+	public function publish($page, $slugify, $markdown) {
+		if('' === $page->slug) {
+			$page->slug = $slugify->slugify($page->title);
+		}
+
+		$page->html = $markdown->parse($page->markdown);
+
+		$this->save($page);
+	}
+
 }

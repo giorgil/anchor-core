@@ -6,6 +6,12 @@
 	"type": "library",
 	"authors": [
 		{
+			"name": "Idiot",
+			"email": "iam@visualidiot.com",
+			"homepage": "http://visualidiot.com/",
+			"role": "Designer"
+		},
+		{
 			"name": "Kieron",
 			"email": "hello@madebykieron.co.uk",
 			"homepage": "http://madebykieron.co.uk",
@@ -13,12 +19,14 @@
 		}
 	],
 	"require": {
-		"php": ">=5.3"
+		"php": ">=5.3",
+		"erusev/parsedown": "dev-master",
+		"ircmaxell/password-compat": "dev-master",
+		"cocur/slugify": "dev-master"
 	},
 	"autoload": {
 		"psr-0": {
 			"Anchor": "src/"
-		},
-		"files": []
+		}
 	}
 }

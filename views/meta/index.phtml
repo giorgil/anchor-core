@@ -1,0 +1,47 @@
+<?php echo $menu; ?>
+
+<section class="list">
+	<h4 class="intro">Extend</h4>
+	<ul>
+		<li>
+			<a class="active" href="<?php echo $this->getHelper('uri')->to('admin/extend/meta'); ?>">
+				Metadata
+				<span>Site Settings</span>
+			</a>
+		</li>
+		<li>
+			<a href="<?php echo $this->getHelper('uri')->to('admin/extend/variables'); ?>">
+				Variables
+				<span>Global Variables</span>
+			</a>
+		</li>
+		<li>
+			<a href="<?php echo $this->getHelper('uri')->to('admin/extend/fields'); ?>">
+				Fields
+				<span>Post and Page Custom Fields</span>
+			</a>
+		</li>
+		<li>
+			<a href="<?php echo $this->getHelper('uri')->to('admin/extend/plugins'); ?>">
+				Plugins
+				<span>Bells and whistles</span>
+			</a>
+		</li>
+	</ul>
+</section>
+
+<?php echo $form->open(); ?>
+
+<main class="content">
+	<hgroup>
+		<h1>Metadata</h1>
+		<p><?php echo $form->getElement('save')->getHtml(); ?></p>
+	</hgroup>
+
+	<?php foreach($form->getElementsExcept(array('save')) as $field): ?>
+	<p><label><?php echo $field->getLabel(); ?></label><br>
+	<?php echo $field->getHtml(); ?></p>
+	<?php endforeach; ?>
+</main>
+
+<?php echo $form->close(); ?>

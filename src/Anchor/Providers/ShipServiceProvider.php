@@ -82,7 +82,7 @@ class ShipServiceProvider implements ProviderInterface {
 			//$nav->add('Menu', 'menu', 'flaticon menu-list-4');
 			$nav->add('Categories', 'categories', 'flaticon tag-1');
 			$nav->add('Users', 'users', 'flaticon user-1');
-			//$nav->add('Extend', 'extend', 'flaticon cube-1');
+			$nav->add('Extend', 'extend', 'flaticon cube-1');
 
 			return $nav;
 		};
@@ -92,89 +92,9 @@ class ShipServiceProvider implements ProviderInterface {
 
 			return new \Anchor\Services\I18n($lang);
 		};
-	}
 
-	protected function registerControllers(Container $app) {
-		/**
-		 * Controllers
-		 */
-		$app['articleController'] = function($app) {
-			$controller = new \Anchor\Controllers\Article;
-
-			$controller->setContainer($app);
-
-			return $controller;
-		};
-
-		$app['pageController'] = function($app) {
-			$controller = new \Anchor\Controllers\Page;
-
-			$controller->setContainer($app);
-
-			return $controller;
-		};
-
-		$app['postsController'] = function($app) {
-			$controller = new \Anchor\Controllers\Posts;
-
-			$controller->setContainer($app);
-
-			return $controller;
-		};
-
-		$app['feedController'] = function($app) {
-			$controller = new \Anchor\Controllers\Feeds;
-
-			$controller->setContainer($app);
-
-			return $controller;
-		};
-
-		/**
-		 * Admin Controllers
-		 */
-		$app['anchorViewsPath'] = function() {
-			return __DIR__ . '/../../../views';
-		};
-
-		$app['adminPostsController'] = function($app) {
-			$controller = new \Anchor\Controllers\Admin\Posts;
-
-			$controller->setContainer($app);
-
-			$controller->setViewPath($app['anchorViewsPath']);
-
-			return $controller;
-		};
-
-		$app['adminPagesController'] = function($app) {
-			$controller = new \Anchor\Controllers\Admin\Pages;
-
-			$controller->setContainer($app);
-
-			$controller->setViewPath($app['anchorViewsPath']);
-
-			return $controller;
-		};
-
-		$app['adminCategoriesController'] = function($app) {
-			$controller = new \Anchor\Controllers\Admin\Categories;
-
-			$controller->setContainer($app);
-
-			$controller->setViewPath($app['anchorViewsPath']);
-
-			return $controller;
-		};
-
-		$app['adminUsersController'] = function($app) {
-			$controller = new \Anchor\Controllers\Admin\Users;
-
-			$controller->setContainer($app);
-
-			$controller->setViewPath($app['anchorViewsPath']);
-
-			return $controller;
+		$app['controllers'] = function($app) {
+			return new \Anchor\Services\ControllerFactory;
 		};
 	}
 
@@ -195,7 +115,6 @@ class ShipServiceProvider implements ProviderInterface {
 
 		$this->registerMappers($app);
 		$this->registerServices($app);
-		$this->registerControllers($app);
 
 		require __DIR__ . '/../../../routes.php';
 	}

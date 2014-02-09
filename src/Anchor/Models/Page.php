@@ -8,8 +8,10 @@
  */
 
 use Ship\Database\Record;
+use Anchor\Services\Validator;
+use Anchor\Services\Contracts\Validatable;
 
-class Page extends Record {
+class Page extends Record implements Validatable {
 
 	protected $fields = array(
 		'id',
@@ -31,6 +33,17 @@ class Page extends Record {
 
 	public function content() {
 		return $this->html;
+	}
+
+	public function getValidationRules(Validator $validator) {
+		$validator->addRule('title', function($value, &$message) {
+			if('' === $value) {
+				$message = 'Please enter a title';
+				return false;
+			}
+
+			return true;
+		});
 	}
 
 }

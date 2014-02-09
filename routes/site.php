@@ -1,84 +1,103 @@
 <?php
 
+use Ship\Routing\Route;
+use Ship\Routing\Condition;
+
+// home and post uri
+$homeUri = $app['pages']->home()->uri();
+$postsUri = $app['pages']->posts()->uri();
+
 // default controller
-$controller = ($app['pages']->home()->id == $app['pages']->posts()->id) ? 'posts': 'page';
+$controller = ($homeUri == $postsUri) ? 'Posts': 'Page';
+
+/**
+ * csrf condition to filter post comments
+ */
+$csrf = new Condition(function() use($app) {
+	if($app['input']->has('token')) {
+		if( ! $app['csrf']->verify($app['input']->get('token'))) {
+			$app['messages']->warning('Invalid Token');
+
+			return $app['response']->redirect($app['request']->getUri());
+		}
+	}
+});
 
 /**
  * The Default page
  */
-$default = new Ship\Routing\Route('/');
-//$default->setController(array($app[$controller.'Controller'], 'index'));
-$default->setController(function() use($app) {
-	return $app['response']->redirect($app['uri']->to($app['pages']->home()->uri()), 301);
-});
-$app['router']->add($default);
+$app['router']->add(new Route('/', array(
+	'controller' => array($app['controllers']->frontend($controller, $app), 'index')
+)));
 
 /**
  * The Home page
  */
-$home = new Ship\Routing\Route($app['pages']->home()->uri());
-$home->setController(array($app[$controller.'Controller'], 'index'));
-$app['router']->add($home);
+$app['router']->add(new Route($homeUri, array(
+	'controller' => array($app['controllers']->frontend($controller, $app), 'index')
+)));
 
 /**
  * Listing page
  */
-$posts = new Ship\Routing\Route($app['pages']->posts()->uri());
-$posts->setController(array($app['postsController'], 'index'));
-$app['router']->add($posts);
+$app['router']->add(new Route($postsUri, array(
+	'controller' => array($app['controllers']->frontend('Posts', $app), 'index')
+)));
 
 /**
  * List posts by category
  */
-$category = new Ship\Routing\Route($app['pages']->posts()->uri() . '/category/:any');
-$category->setController(array($app['postsController'], 'category'));
-$app['router']->add($category);
+$app['router']->add(new Route($postsUri . '/category/:any', array(
+	'controller' => array($app['controllers']->frontend('Posts', $app), 'category')
+)));
 
 /**
  * Rss feed
  */
-$rss = new Ship\Routing\Route('feeds/rss');
-$rss->setController(array($app['feedController'], 'rss'));
-$app['router']->add($rss);
+$app['router']->add(new Route('feeds/rss', array(
+	'controller' => array($app['controllers']->frontend('Feeds', $app), 'rss')
+)));
 
 /**
  * Json feed
  */
-$json = new Ship\Routing\Route('feeds/json');
-$json->setController(array($app['feedController'], 'json'));
-$app['router']->add($json);
+$app['router']->add(new Route('feeds/json', array(
+	'controller' => array($app['controllers']->frontend('Feeds', $app), 'json')
+)));
 
 /**
  * Redirect by article ID
  */
-$redirect = new Ship\Routing\Route('[0-9]+');
-$redirect->setController(array($app['articleController'], 'redirect'));
-$app['router']->add($redirect);
+$app['router']->add(new Route('[0-9]+', array(
+	'controller' => array($app['controllers']->frontend('Article', $app), 'redirect')
+)));
 
 /**
  * View article
  */
-$article = new Ship\Routing\Route($app['pages']->posts()->uri() . '/:any');
-$article->setController(array($app['articleController'], 'view'));
-$app['router']->add($article);
+$app['router']->add(new Route($postsUri . '/:any', array(
+	'controller' => array($app['controllers']->frontend('Article', $app), 'view')
+)));
 
 /**
  * Post a comment
  */
-$comment = new Ship\Routing\Route($app['pages']->posts()->uri() . '/:any');
-$comment->setRequirement('method', 'POST')->setController(array($app['articleController'], 'comment'));
-$app['router']->add($comment);
+$app['router']->add(new Route($postsUri . '/:any', array(
+	'conditions' => array($csrf),
+	'requirements' => array('method' => 'POST'),
+	'controller' => array($app['controllers']->frontend('Article', $app), 'comment')
+)));
 
 /**
  * Search
  */
-$search = new Ship\Routing\Route('search');
-$search->setController(array($app['pageController'], 'search'));
-$app['router']->add($search);
+$app['router']->add(new Route('search', array(
+	'controller' => array($app['controllers']->frontend('Page', $app), 'search')
+)));
 
 /**
  * View pages
  */
-$page = new Ship\Routing\Route(':any');
-$page->setController(array($app['pageController'], 'index'));
-$app['router']->add($page);
+$app['router']->add(new Route(':any', array(
+	'controller' => array($app['controllers']->frontend('Page', $app), 'index')
+)));

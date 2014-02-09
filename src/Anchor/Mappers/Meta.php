@@ -21,4 +21,14 @@ class Meta extends Base {
 		return $this->cached[$key] = $this->query()->select('value')->where('key', '=', $key)->column();
 	}
 
+	public function toArray() {
+		$data = array();
+
+		foreach($this->all() as $meta) {
+			$data[$meta['key']] = $meta['value'];
+		}
+
+		return $data;
+	}
+
 }
