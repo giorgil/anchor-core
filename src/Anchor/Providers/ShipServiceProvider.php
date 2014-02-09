@@ -77,9 +77,9 @@ class ShipServiceProvider implements ProviderInterface {
 			$nav->setPrefix('admin')->setActive($app['request']->getUri());
 
 			$nav->add('Posts', 'posts', 'flaticon feather-1');
-			//$nav->add('Comments', 'comments', 'flaticon writing-comment-2');
+			$nav->add('Comments', 'comments', 'flaticon writing-comment-2');
 			$nav->add('Pages', 'pages', 'flaticon multiple-documents-1');
-			//$nav->add('Menu', 'menu', 'flaticon menu-list-4');
+			$nav->add('Menu', 'menu', 'flaticon menu-list-4');
 			$nav->add('Categories', 'categories', 'flaticon tag-1');
 			$nav->add('Users', 'users', 'flaticon user-1');
 			$nav->add('Extend', 'extend', 'flaticon cube-1');

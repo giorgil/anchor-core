@@ -1,47 +1,30 @@
 <?php
 
-Route::collection(array('before' => 'auth'), function() {
+use Ship\Routing\Route;
 
-	/*
-		List all themes
-	*/
-	Route::get('admin/extend/themes', function($page = 1) {
-		$vars['messages'] = Notify::read();
-		$vars['token'] = Csrf::token();
-		
-		$vars['themes'] = Themes::all();
+/*
+ * List Themes
+ */
+$app['router']->add(new Route('admin/extend/themes', array(
+	'conditions' => array($auth, $csrf),
+	'requirements' => array('method' => 'GET'),
+	'controller' => array($app['controllers']->backend('Themes', $app), 'index')
+)));
 
-		return View::create('extend/themes/index', $vars)
-    		->partial('nav', 'extend/nav')
-			->partial('header', 'partials/header')
-			->partial('footer', 'partials/footer');
-	});
+/*
+ * View Theme
+ */
+$app['router']->add(new Route('admin/extend/themes/:name', array(
+	'conditions' => array($auth, $csrf),
+	'requirements' => array('method' => 'GET'),
+	'controller' => array($app['controllers']->backend('Themes', $app), 'view')
+)));
 
-	/*
-		theme overview
-	*/
-	Route::get('admin/extend/themes/(:any)', function($slug) {
-		$vars['messages'] = Notify::read();
-		$vars['token'] = Csrf::token();
-
-		return View::create('extend/themes/overview', $vars)
-    		->partial('nav', 'extend/nav')
-			->partial('header', 'partials/header')
-			->partial('footer', 'partials/footer');
-	});
-
-	/*
-		theme install
-	*/
-	Route::get('admin/extend/themes/(:any)/install', function($slug) {
-		return Response::redirect('admin/extend/themes');
-	});
-
-	/*
-		theme uninstall
-	*/
-	Route::get('admin/extend/themes/(:any)/uninstall', function($slug) {
-		return Response::redirect('admin/extend/themes');
-	});
-
-});
+/*
+ * Use Theme
+ */
+$app['router']->add(new Route('admin/extend/themes/:name/use', array(
+	'conditions' => array($auth, $csrf),
+	'requirements' => array('method' => 'POST'),
+	'controller' => array($app['controllers']->backend('Themes', $app), 'use')
+)));

@@ -1,0 +1,31 @@
+<?php echo $menu; ?>
+
+<section class="list">
+	<h4 class="intro">Users</h4>
+	<ul>
+		<?php foreach($users as $user): ?>
+		<li>
+			<a href="<?php echo $this->getHelper('uri')->to('admin/users/'.$user->id.'/edit'); ?>">
+				<?php echo $user->real_name; ?>
+				<span><?php echo $user->role; ?></span>
+			</a>
+		</li>
+		<?php endforeach; ?>
+	</ul>
+</section>
+
+<?php echo $form->open(); ?>
+
+<main class="content">
+	<hgroup>
+		<h1><?php echo $form->getElement('real_name')->getHtml(); ?></h1>
+		<p><?php echo $form->getElement('save')->getHtml(); ?></p>
+	</hgroup>
+
+	<?php foreach($form->getElementsExcept(array('real_name', 'save')) as $field): ?>
+	<p><label><?php echo $field->getLabel(); ?></label><br>
+	<?php echo $field->getHtml(); ?></p>
+	<?php endforeach; ?>
+</section>
+
+<?php echo $form->close(); ?>

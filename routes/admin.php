@@ -69,3 +69,33 @@ $app['router']->add(new Route('admin/extend', array(
 	'requirements' => array('method' => 'GET'),
 	'controller' => array($app['controllers']->backend('Extend', $app), 'index')
 )));
+
+/*
+ * Site Variables
+ */
+$app['resource']->add('admin/extend/variables', $app['controllers']->backend('Variables', $app), array($auth, $csrf));
+
+/*
+ * Custom Fields
+ */
+$app['resource']->add('admin/extend/fields', $app['controllers']->backend('Fields', $app), array($auth, $csrf));
+
+/**
+ * Comments
+ */
+$app['resource']->add('admin/comments', $app['controllers']->backend('Comments', $app), array($auth, $csrf));
+
+/**
+ * Categories
+ */
+$app['resource']->add('admin/categories', $app['controllers']->backend('Categories', $app), array($auth, $csrf));
+
+/**
+ * Posts
+ */
+$app['resource']->add('admin/posts', $app['controllers']->backend('Posts', $app), array($auth, $csrf));
+
+/**
+ * Pages
+ */
+$app['resource']->add('admin/pages', $app['controllers']->backend('Pages', $app), array($auth, $csrf));

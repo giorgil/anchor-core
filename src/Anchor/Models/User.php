@@ -8,8 +8,10 @@
  */
 
 use Ship\Database\Record;
+use Anchor\Services\Validator;
+use Anchor\Services\Contracts\Validatable;
 
-class User extends Record {
+class User extends Record implements Validatable {
 
 	protected $fields = array(
 		'id',
@@ -25,5 +27,16 @@ class User extends Record {
 	protected $guarded = array(
 		'password',
 	);
+
+	public function getValidationRules(Validator $validator) {
+		$validator->addRule('username', function($value, &$message) {
+			if('' === $value) {
+				$message = 'Please enter a username';
+				return false;
+			}
+
+			return true;
+		});
+	}
 
 }

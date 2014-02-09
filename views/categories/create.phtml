@@ -1,0 +1,31 @@
+<?php echo $menu; ?>
+
+<section class="list">
+	<h4 class="intro">Categories</h4>
+	<ul>
+		<?php foreach($categories as $category): ?>
+		<li>
+			<a href="<?php echo $this->getHelper('uri')->to('admin/categories/'.$category->id.'/edit'); ?>">
+				<?php echo $category->title; ?>
+				<span><?php echo $category->description; ?></span>
+			</a>
+		</li>
+		<?php endforeach; ?>
+	</ul>
+</section>
+
+<?php echo $form->open(); ?>
+
+<main class="content">
+	<hgroup>
+		<h1><?php echo $form->getElement('title')->getHtml(); ?></h1>
+		<p><?php echo $form->getElement('save')->getHtml(); ?></p>
+	</hgroup>
+
+	<?php foreach($form->getElementsExcept(array('title', 'save')) as $field): ?>
+	<p><label><?php echo $field->getLabel(); ?></label><br>
+	<?php echo $field->getHtml(); ?></p>
+	<?php endforeach; ?>
+</main>
+
+<?php echo $form->close(); ?>

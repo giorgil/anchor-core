@@ -41,16 +41,40 @@ abstract class Field {
 		return $this->name;
 	}
 
+	public function setName($name) {
+		$this->name = $name;
+
+		return $this;
+	}
+
+	public function getForm() {
+		return $this->form;
+	}
+
 	public function setForm($form) {
-		return $this->form = $form;
+		$this->form = $form;
+
+		return $this;
 	}
 
 	public function getOption($name, $default = '') {
 		return isset($this->options[$name]) ? $this->options[$name] : $default;
 	}
 
+	public function setOption($name, $value) {
+		$this->options[$name] = $value;
+
+		return $this;
+	}
+
 	public function getLabel() {
 		return $this->getOption('label', $this->name);
+	}
+
+	public function setLabel($label) {
+		$this->setOption('label', $label);
+
+		return $this;
 	}
 
 	public function getValue($default = '') {
@@ -58,7 +82,9 @@ abstract class Field {
 	}
 
 	public function setValue($value) {
-		return $this->form->setValue($this->name, $value);
+		$this->form->setValue($this->name, $value);
+
+		return $this;
 	}
 
 }

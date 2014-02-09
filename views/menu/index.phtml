@@ -1,0 +1,19 @@
+<?php echo $menu; ?>
+
+<section class="list">
+	<h4 class="intro">Menu</h4>
+	<ul>
+		<?php foreach($pages as $page): ?>
+		<li>
+			<a href="<?php echo $this->getHelper('uri')->to('admin/pages/'.$page->id.'/edit'); ?>">
+				<?php echo $page->name; ?>
+				<span><?php echo $page->slug; ?></span>
+			</a>
+		</li>
+		<?php endforeach; ?>
+	</ul>
+</section>
+
+<main class="content">
+	<span class="empty-state flaticon feather-1">Click a page on the left to edit.</span>
+</main>

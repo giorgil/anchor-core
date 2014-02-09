@@ -7,7 +7,6 @@
  * @license		http://opensource.org/licenses/GPL-3.0
  */
 
-use ArrayObject;
 use Anchor\Models\User;
 
 class Users extends Base {
