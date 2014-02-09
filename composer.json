@@ -4,6 +4,12 @@
 	"license": "GPL-3.0",
 	"version": "0.1.0",
 	"type": "library",
+	"repositories": [
+		{
+			"type": "vcs",
+			"url": "git@github.com:rwarasaurus/ship.git"
+		}
+	],
 	"authors": [
 		{
 			"name": "Idiot",
@@ -20,6 +26,7 @@
 	],
 	"require": {
 		"php": ">=5.3",
+		"rwarasaurus/ship": "dev-master",
 		"erusev/parsedown": "dev-master",
 		"ircmaxell/password-compat": "dev-master",
 		"cocur/slugify": "dev-master"
