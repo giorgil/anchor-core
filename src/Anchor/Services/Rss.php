@@ -61,18 +61,12 @@ class Rss {
 		$this->channel->appendChild($description);
 
 		// laguage
-		// http://www.rssboard.org/rss-language-codes
 		$language = $this->element('language', $language);
 		$this->channel->appendChild($language);
 
-		$ttl = $this->element('ttl', 60);
-		$this->channel->appendChild($ttl);
-
+		// docs
 		$docs = $this->element('docs', 'http://blogs.law.harvard.edu/tech/rss');
 		$this->channel->appendChild($docs);
-
-		$copyright = $this->element('copyright', $name);
-		$this->channel->appendChild($copyright);
 
 		// atom self link
 		$atom = $this->element('atom:link', null, array(
@@ -94,6 +88,10 @@ class Rss {
 		// link
 		$link = $this->element('link', $url);
 		$item->appendChild($link);
+
+		// guid
+		$guid = $this->element('guid', $url);
+		$item->appendChild($guid);
 
 		// description
 		$description = $this->element('description', $description);

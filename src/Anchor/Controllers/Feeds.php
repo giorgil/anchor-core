@@ -12,11 +12,17 @@ use Anchor\Services\Rss;
 class Feeds extends Frontend {
 
 	public function rss() {
+
+		$lang = $this->config->get('app.lang', 'en_GB');
+
+		// convert to ISO-639 language code
+		$lang = str_replace('_', '-', $lang);
+
 		$rss = new Rss(
 			$this->meta->get('sitename'),
 			$this->meta->get('description'),
-			$this->uri->to('/'),
-			$this->config->get('app.lang')
+			$this->uri->to('feeds/rss'),
+			$lang
 		);
 
 		$page = $this->pages->posts();
