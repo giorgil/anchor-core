@@ -35,5 +35,6 @@
 		"psr-0": {
 			"Anchor": "src/"
 		}
-	}
+	},
+	"minimum-stability": "dev"
 }
