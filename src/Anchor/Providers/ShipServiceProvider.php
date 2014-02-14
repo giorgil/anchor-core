@@ -107,8 +107,36 @@ class ShipServiceProvider implements ProviderInterface {
 			}
 		});
 
-		$app['error']->handler(function(\Anchor\Exceptions\HttpNotFound $e) {
-			echo '404';
+		$app['error']->handler(function(\Anchor\Exceptions\HttpNotFound $e) use($app) {
+			return $app['controllers']->frontend('page', $app)->notFound();
+		});
+
+		$app['error']->handler(function(Exception $e) use($app) {
+			ob_get_level() and ob_end_clean();
+
+			if( ! headers_Sent()) {
+				header('HTTP/1.1 500 Internal Server Error', true, 500);
+			}
+
+			$index = $e->getFile().$e->getLine();
+
+			$frames[$index] = array(
+				'file' => $e->getFile(),
+				'line' => $e->getLine()
+			);
+
+			foreach($e->getTrace() as $frame) {
+				if(isset($frame['file']) and isset($frame['line'])) {
+					$index = $frame['file'].$frame['line'];
+
+					$frames[$index] = array(
+						'file' => $frame['file'],
+						'line' => $frame['line']
+					);
+				}
+			}
+
+			require __DIR__ . '/../../../views/error.php';
 		});
 
 		$app['admin'] = strpos($app['request']->getUri(), '/admin') === 0;

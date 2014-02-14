@@ -30,7 +30,7 @@ abstract class Frontend extends Controller {
 			return $page;
 		}
 
-		throw new HttpNotFound('Page not found');
+		throw new HttpNotFound(sprintf('Page "%s" not found', $slug));
 	}
 
 	protected function getTemplate($name, $slug = '') {
