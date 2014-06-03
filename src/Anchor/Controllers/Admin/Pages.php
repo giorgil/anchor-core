@@ -69,8 +69,7 @@ class Pages extends Backend {
 	}
 
 	public function edit($request, $route) {
-		$params = $route->getParams();
-		$id = $params[0];
+		$id = $route->getParam('id');
 
 		$page = $this->pages->find($id);
 
@@ -97,8 +96,7 @@ class Pages extends Backend {
 	}
 
 	public function update($request, $route) {
-		$params = $route->getParams();
-		$id = $params[0];
+		$id = $route->getParam('id');
 
 		$page = $this->pages->find($id);
 
@@ -132,8 +130,7 @@ class Pages extends Backend {
 
 	public function destroy() {
 		// post ID
-		$params = $route->getParams();
-		$id = $params[0];
+		$id = $route->getParam('id');
 
 		$this->messages->info('Page deleted');
 

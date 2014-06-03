@@ -93,8 +93,7 @@ class Posts extends Backend {
 
 	public function edit($request, $route) {
 		// post ID
-		$params = $route->getParams();
-		$id = $params[0];
+		$id = $route->getParam('id');
 
 		// find post
 		$post = $this->posts->find($id);
@@ -124,8 +123,7 @@ class Posts extends Backend {
 
 	public function update($request, $route) {
 		// post ID
-		$params = $route->getParams();
-		$id = $params[0];
+		$id = $route->getParam('id');
 
 		// find post
 		$post = $this->posts->find($id);
@@ -160,8 +158,7 @@ class Posts extends Backend {
 
 	public function destroy($request, $route) {
 		// post ID
-		$params = $route->getParams();
-		$id = $params[0];
+		$id = $route->getParam('id');
 
 		// find post
 		$post = $this->posts->find($id);
