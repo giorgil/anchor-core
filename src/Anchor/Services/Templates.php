@@ -1,4 +1,4 @@
-<?php namespace Anchor\Mappers;
+<?php namespace Anchor\Services;
 
 /**
  * @package		Anchor Core
@@ -7,20 +7,21 @@
  * @license		http://opensource.org/licenses/GPL-3.0
  */
 
-use Ship\View;
-
 class Templates {
 
-	public function __construct($theme) {
+	protected $ext;
+
+	public function __construct($theme, $ext = '.php') {
 		$this->theme = $theme;
+		$this->ext = $ext;
 	}
 
 	public function find($name) {
-		return $this->theme . '/' . $name . '.php';
+		return $this->theme . '/' . $name . $this->ext;
 	}
 
 	public function exists($name) {
-		return file_exists($this->theme . '/' . $name . '.php');
+		return file_exists($this->theme . '/' . $name . $this->ext);
 	}
 
 }

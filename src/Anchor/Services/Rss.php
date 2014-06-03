@@ -19,7 +19,7 @@ class Rss {
 		$element = $this->document->createElement($name);
 
 		if(is_null($value) === false) {
-			if(preg_match('#<[^>]+>#', $value)) {
+			if($value != strip_tags($value)) {
 				$text = $this->document->createCDATASection($value);
 			}
 			else {

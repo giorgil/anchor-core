@@ -20,12 +20,11 @@ class ShipServiceProvider implements ProviderInterface {
 			return new \Anchor\Mappers\Themes($app['meta']);
 		};
 
-		$app['templates'] = function($app) {
-			return new \Anchor\Mappers\Templates($app['themes']->active());
-		};
-
 		$app['pages'] = function($app) {
-			return new \Anchor\Mappers\Pages($app['query'], $app['meta']);
+			$pages = new \Anchor\Mappers\Pages($app['query']);
+			$pages->setMeta($app['meta']);
+
+			return $pages;
 		};
 
 		$app['posts'] = function($app) {
@@ -71,6 +70,10 @@ class ShipServiceProvider implements ProviderInterface {
 			return new \Anchor\Services\Registry;
 		};
 
+		$app['templates'] = function($app) {
+			return new \Anchor\Services\Templates($app['themes']->active());
+		};
+
 		$app['nav'] = function($app) {
 			$nav = new \Anchor\Services\Nav($app['uri']);
 
@@ -108,35 +111,30 @@ class ShipServiceProvider implements ProviderInterface {
 		});
 
 		$app['error']->handler(function(\Anchor\Exceptions\HttpNotFound $e) use($app) {
-			return $app['controllers']->frontend('page', $app)->notFound();
+			$response = $app['controllers']->frontend('page', $app)->notFound();
+
+			return $response->send();
 		});
 
-		$app['error']->handler(function(Exception $e) use($app) {
+		$app['error']->handler(function(\Exception $e) use($app) {
 			ob_get_level() and ob_end_clean();
 
 			if( ! headers_Sent()) {
 				header('HTTP/1.1 500 Internal Server Error', true, 500);
 			}
 
-			$index = $e->getFile().$e->getLine();
-
-			$frames[$index] = array(
-				'file' => $e->getFile(),
-				'line' => $e->getLine()
-			);
-
-			foreach($e->getTrace() as $frame) {
-				if(isset($frame['file']) and isset($frame['line'])) {
-					$index = $frame['file'].$frame['line'];
-
-					$frames[$index] = array(
-						'file' => $frame['file'],
-						'line' => $frame['line']
-					);
-				}
-			}
-
-			require __DIR__ . '/../../../views/error.php';
+			echo '<!DOCTYPE html>
+				<html lang="en">
+					<head>
+						<meta charset="UTF-8">
+						<title>Whoops</title>
+					</head>
+					<body>
+						<h1>'.$e->getMessage().'</h1>
+						<p>'.$e->getFile().':'.$e->getLine().'</p>
+						<p><pre>'.$e->getTraceAsString().'</pre></p>
+					</body>
+				</html>';
 		});
 
 		$app['admin'] = strpos($app['request']->getUri(), '/admin') === 0;

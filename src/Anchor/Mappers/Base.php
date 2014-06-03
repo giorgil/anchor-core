@@ -9,6 +9,7 @@
 
 use Closure;
 use Iterator;
+use RuntimeException;
 
 use Ship\Database\Table;
 
@@ -20,9 +21,13 @@ class Base extends Table {
 		$this->results = $results;
 	}
 
+	public function getResults() {
+		return $this->results;
+	}
+
 	public function loop(Closure $callback) {
-		if(null === $this->results) {
-			$this->results = new \ArrayIterator($this->all());
+		if( ! $this->results instanceof Iterator) {
+			throw new RuntimeException('Iterator not set');
 		}
 
 		if($this->results->valid()) {
@@ -38,7 +43,7 @@ class Base extends Table {
 		return false;
 	}
 
-	public function create($row) {
+	public function create(array $row) {
 		return $row;
 	}
 

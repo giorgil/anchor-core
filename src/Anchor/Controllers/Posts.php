@@ -17,11 +17,15 @@ class Posts extends Frontend {
 		$page = $this->input->filter('page', 1, FILTER_SANITIZE_NUMBER_INT);
 		$offset = ($page - 1) * $perpage;
 
-		$query = $this->posts->where('status', '=', 'published')
-			->order('created', 'desc')->skip($offset)->take($perpage);
+		// Set posts
+		$query = $this->posts
+			->where('status', '=', 'published')
+			->order('created', 'desc')
+			->skip($offset)
+			->take($perpage);
 
-		$results = new ArrayIterator($this->posts->all($query));
-
+		$results = $this->posts->all($query);
+		$results->buffer();
 		$this->posts->setResults($results);
 
 		// get current page

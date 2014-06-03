@@ -19,6 +19,10 @@ function has_menu_items() {
 function menu_items() {
 	global $app;
 
+	if(null === $app['pages']->getResults()) {
+		$app['pages']->setResults($app['pages']->menuItems());
+	}
+
 	return $app['pages']->loop(function($page) use($app) {
 		$app['registry']->put('item', $page);
 	});

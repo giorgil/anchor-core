@@ -8,6 +8,7 @@
  */
 
 use Anchor\Models\Page;
+use Ship\Database\Contracts\TableInterface;
 
 class Pages extends Base {
 
@@ -17,8 +18,7 @@ class Pages extends Base {
 
 	protected $meta;
 
-	public function __construct($query, $meta) {
-		$this->query = $query;
+	public function setMeta(TableInterface $meta) {
 		$this->meta = $meta;
 	}
 
@@ -42,8 +42,19 @@ class Pages extends Base {
 		return $this->cached[$id] = $this->find($id);
 	}
 
-	public function create($row) {
+	public function create(array $row) {
 		return new Page($row);
+	}
+
+	public function menuItems() {
+		$query = $this->where('status', '=', 'published')
+			->where('show_in_menu', '=', '1')
+			->order('menu_order', 'asc');
+
+		$results = $this->all($query);
+		$results->buffer();
+
+		return $results;
 	}
 
 	/**

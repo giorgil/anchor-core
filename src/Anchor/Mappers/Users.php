@@ -13,7 +13,7 @@ class Users extends Base {
 
 	protected $table = 'users';
 
-	public function create($row) {
+	public function create(array $row) {
 		return new User($row);
 	}
 

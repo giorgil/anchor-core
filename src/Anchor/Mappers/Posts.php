@@ -57,7 +57,7 @@ class Posts extends Base {
 	 *
 	 * @param object
 	 */
-	public function create($row) {
+	public function create(array $row) {
 		$post = new Post($row);
 
 		$categories = new Categories($this->query);
@@ -79,9 +79,9 @@ class Posts extends Base {
 	}
 
 	/**
-	 * Fetch a buffered array of published posts
+	 * Fetch published posts
 	 *
-	 * @return object ArrayObject
+	 * @return object Collection
 	 */
 	public function published() {
 		return $this->all($this->query()
@@ -90,9 +90,9 @@ class Posts extends Base {
 	}
 
 	/**
-	 * Fetch a buffered array of latest posts
+	 * Fetch latest posts
 	 *
-	 * @return object ArrayObject
+	 * @return object Collection
 	 */
 	public function latest() {
 		return $this->all($this->query()

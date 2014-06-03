@@ -17,6 +17,8 @@ class Post extends Record implements Validatable {
 
 	protected $userModel;
 
+	protected $customFields;
+
 	protected $fields = array(
 		'id',
 		'title',
@@ -52,6 +54,14 @@ class Post extends Record implements Validatable {
 
 	public function getAuthor() {
 		return $this->userModel;
+	}
+
+	public function getMeta() {
+		return $customFields;
+	}
+
+	public function setMeta(array $customFields) {
+		$this->customFields = $customFields;
 	}
 
 	public function getValidationRules(Validator $validator) {
