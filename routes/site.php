@@ -47,7 +47,7 @@ $app['router']->add(new Route($postsUri, array(
 /**
  * List posts by category
  */
-$app['router']->add(new Route($postsUri . '/category/:any', array(
+$app['router']->add(new Route($postsUri . '/category/:slug', array(
 	'controller' => array($app['controllers']->frontend('Posts', $app), 'category')
 )));
 
@@ -68,14 +68,14 @@ $app['router']->add(new Route('feeds/json', array(
 /**
  * Redirect by article ID
  */
-$app['router']->add(new Route('[0-9]+', array(
+$app['router']->add(new Route('([0-9]+)', array(
 	'controller' => array($app['controllers']->frontend('Article', $app), 'redirect')
 )));
 
 /**
  * View article
  */
-$app['router']->add(new Route($postsUri . '/:any', array(
+$app['router']->add(new Route($postsUri . '/:slug', array(
 	'controller' => array($app['controllers']->frontend('Article', $app), 'view')
 )));
 

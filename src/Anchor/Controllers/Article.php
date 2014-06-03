@@ -12,8 +12,7 @@ use Anchor\Exceptions\HttpNotFound;
 class Article extends Frontend {
 
 	public function redirect($request, $route) {
-		$params = $route->getParams();
-		$id = $params[0];
+		$id = $route->getParam(0);
 
 		if($article = $this->posts->find($id)) {
 			$uri = $this->uri->to($this->pages->posts()->uri() . '/' . $article->uri());
@@ -27,8 +26,7 @@ class Article extends Frontend {
 	public function view($request, $route) {
 		$page = $this->pages->posts();
 
-		$params = $route->getParams();
-		$slug = $params[0];
+		$slug = $route->getParam('slug');
 
 		$article = $this->posts->fetch($this->posts->where('slug', '=', $slug));
 
