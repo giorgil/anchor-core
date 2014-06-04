@@ -16,9 +16,7 @@ class Themes {
 	}
 
 	public function active() {
-		$active = $this->meta->select('value')
-			->where('key', '=', 'theme')
-			->column();
+		$active = $this->meta->get('theme');
 
 		return realpath('themes/' . $active);
 	}

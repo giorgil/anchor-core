@@ -9,26 +9,20 @@
 
 class Meta extends Base {
 
-	protected $cached = array();
+	protected $data;
 
 	protected $table = 'meta';
 
 	public function get($key) {
-		if(isset($this->cached[$key])) {
-			return $this->cached[$key];
+		if(null === $this->data) {
+			$this->data = $this->all()->toColumn('value', 'key');
 		}
 
-		return $this->cached[$key] = $this->query()->select('value')->where('key', '=', $key)->column();
+		return $this->data[$key];
 	}
 
 	public function toArray() {
-		$data = array();
-
-		foreach($this->all() as $meta) {
-			$data[$meta['key']] = $meta['value'];
-		}
-
-		return $data;
+		return $this->data;
 	}
 
 }

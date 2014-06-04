@@ -82,7 +82,7 @@ $app['router']->add(new Route($postsUri . '/:slug', array(
 /**
  * Post a comment
  */
-$app['router']->add(new Route($postsUri . '/:any', array(
+$app['router']->add(new Route($postsUri . '/:slug', array(
 	'conditions' => array($csrf),
 	'requirements' => array('method' => 'POST'),
 	'controller' => array($app['controllers']->frontend('Article', $app), 'comment')
@@ -98,6 +98,6 @@ $app['router']->add(new Route('search', array(
 /**
  * View pages
  */
-$app['router']->add(new Route(':any', array(
+$app['router']->add(new Route(':slug', array(
 	'controller' => array($app['controllers']->frontend('Page', $app), 'index')
 )));

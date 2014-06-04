@@ -103,12 +103,48 @@ class ShipServiceProvider implements ProviderInterface {
 
 	public function register(Container $app) {
 
+		$app['events']->attach('beforeResponse', function() use($app) {
+			if($app['admin']) {
+				$date = new DateTime();
+				$date->sub(new DateInterval('P1Y'));
+				$app['response']->setHeader('expires', $date->format(DateTime::RFC2822));
+			}
+		});
+
 		$app['events']->attach('beforeDispatch', function() {
 			// load theme functions before processing the request
 			foreach(glob(__DIR__ . '/../../../functions/*.php') as $functions) {
 				require $functions;
 			}
 		});
+
+		if($app['config']->get('app.profiling')) {
+			$app['events']->attach('beforeResponse', function() use($app) {
+				$template = __DIR__.'/../../../views/partials/profile.phtml';
+				$logs = $app['query']->getQueryLog();
+
+				$view = new \Ship\View($template, array(
+					'logs' => $logs
+				));
+				$body = str_replace('</body>', $view->render().'</body>', $app['response']->getBody());
+
+				$app['response']->setBody($body);
+			});
+
+			$app['events']->attach('beforeResponse', function() use($app) {
+				// Append elapsed time and memory usage
+				$time_end = microtime(true);
+				$elapsed_time = round(($time_end - $app['time_start']) * 1000);
+				$memory = round(memory_get_peak_usage(true) / 1024 / 1024, 2);
+
+				$tags = array('{elapsed_time}', '{memory_usage}');
+				$values = array($elapsed_time, $memory);
+
+				$body = str_replace($tags, $values, $app['response']->getBody());
+
+				$app['response']->setBody($body);
+			});
+		}
 
 		$app['error']->handler(function(\Anchor\Exceptions\HttpNotFound $e) use($app) {
 			$html = $app['controllers']->frontend('page', $app)->notFound();

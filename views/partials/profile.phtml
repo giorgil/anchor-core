@@ -1,0 +1,18 @@
+<table>
+	<thead>
+		<tr>
+			<th>Time</th>
+			<th>Query</th>
+			<th>Binds</th>
+		</tr>
+	</thead>
+	<tbody>
+		<?php foreach($logs as $log): ?>
+		<tr>
+			<td><?php echo round($log['time'] * 1000000); ?>μs</td>
+			<td><?php echo $log['sql']; ?></td>
+			<td><?php echo json_encode($log['values']); ?></td>
+		</tr>
+		<?php endforeach; ?>
+	</tbody>
+</table>
