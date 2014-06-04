@@ -35,6 +35,9 @@ class Pages extends Backend {
 		$form->setAttr('action', $this->uri->to('admin/pages/store'));
 		$form->setAttr('method', 'POST');
 
+		$form->setValues($this->session->get('_flash'));
+		$this->session->remove('_flash');
+
 		$vars['messages'] = $this->messages->render();
 		$vars['token'] = $this->csrf->token();
 
@@ -54,7 +57,7 @@ class Pages extends Backend {
 		$validator->validate($page);
 
 		if( ! $validator->isValid()) {
-			//$this->session->flash($this->input->getArrayCopy());
+			$this->session->put('_flash', $this->input->getArrayCopy());
 
 			$this->messages->add('error', $validator->getMessages());
 
