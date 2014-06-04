@@ -111,30 +111,50 @@ class ShipServiceProvider implements ProviderInterface {
 		});
 
 		$app['error']->handler(function(\Anchor\Exceptions\HttpNotFound $e) use($app) {
-			$response = $app['controllers']->frontend('page', $app)->notFound();
+			$html = $app['controllers']->frontend('page', $app)->notFound();
 
-			return $response->send();
+			return $app['response']->setStatusCode(404)->setBody($html)->send();
 		});
 
 		$app['error']->handler(function(\Exception $e) use($app) {
 			ob_get_level() and ob_end_clean();
 
-			if( ! headers_Sent()) {
-				header('HTTP/1.1 500 Internal Server Error', true, 500);
-			}
-
-			echo '<!DOCTYPE html>
-				<html lang="en">
+			if($app['config']->get('error.report')) {
+				$html = '<!DOCTYPE html>
+					<html>
 					<head>
-						<meta charset="UTF-8">
 						<title>Whoops</title>
+						<style>
+							body { font-family: sans-serif; }
+							h2 { font-weight: normal; }
+						</style>
 					</head>
 					<body>
-						<h1>'.$e->getMessage().'</h1>
+						<h2>'.$e->getMessage().'</h2>
 						<p>'.$e->getFile().':'.$e->getLine().'</p>
 						<p><pre>'.$e->getTraceAsString().'</pre></p>
 					</body>
-				</html>';
+					</html>';
+			}
+			else {
+				$html = '<!DOCTYPE html>
+					<html>
+					<head>
+						<title>Whoops</title>
+						<style>
+							body { font-family: sans-serif; }
+							h2 { font-weight: normal; }
+						</style>
+					</head>
+					<body>
+						<h2>Looks like something went wrong!</h2>
+						<p>We track these errors automatically, but if the problem
+						persists feel free to contact us. In the meantime, try refreshing.</p>
+					</body>
+					</html>';
+			}
+
+			return $app['response']->setStatusCode(500)->setBody($html)->send();
 		});
 
 		$app['admin'] = strpos($app['request']->getUri(), '/admin') === 0;

@@ -30,7 +30,17 @@ function posts() {
  * @return string
  */
 function posts_next($text = 'Next &rarr;', $default = '') {
-	return;
+	global $app;
+
+	if($next = $app['registry']->get('post_next_page')) {
+		$page = $app['registry']->get('page');
+
+		$uri = full_url($page->uri().'?page='.$next);
+
+		return sprintf('<a href="%s">%s</a>', $uri, $text);
+	}
+
+	return $default;
 }
 
 /**
@@ -39,7 +49,17 @@ function posts_next($text = 'Next &rarr;', $default = '') {
  * @return string
  */
 function posts_prev($text = '&larr; Previous', $default = '') {
-	return;
+	global $app;
+
+	if($prev = $app['registry']->get('post_prev_page')) {
+		$page = $app['registry']->get('page');
+
+		$uri = full_url($page->uri().'?page='.$prev);
+
+		return sprintf('<a href="%s">%s</a>', $uri, $text);
+	}
+
+	return $default;
 }
 
 /**
@@ -60,7 +80,9 @@ function total_posts() {
  * @return bool
  */
 function has_pagination() {
-	return;
+	global $app;
+
+	return $app['registry']->get('post_prev_page') or $app['registry']->get('post_next_page');
 }
 
 /**
@@ -70,5 +92,7 @@ function has_pagination() {
  * @return string
  */
 function posts_per_page() {
-	return;
+	global $app;
+
+	return $app['meta']->get('posts_per_page', 10);
 }

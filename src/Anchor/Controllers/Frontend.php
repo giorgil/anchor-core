@@ -76,9 +76,7 @@ abstract class Frontend extends Controller {
 		$page = $this->pages->home();
 		$this->registry->put('page', $page);
 
-		$html = $this->renderTemplate('404', '', array('message' => $title));
-
-		return $this->response->setStatusCode(404)->setBody($html);
+		return $this->renderTemplate('404', '', array('message' => $title));
 	}
 
 }

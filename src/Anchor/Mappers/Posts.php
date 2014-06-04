@@ -58,24 +58,7 @@ class Posts extends Base {
 	 * @param object
 	 */
 	public function create(array $row) {
-		$post = new Post($row);
-
-		$categories = new Categories($this->query);
-
-		if($category = $categories->find($post->category)) {
-			$post->setCategory($category);
-		}
-		else {
-			$post->setCategory($categories->fetch());
-		}
-
-		//$comments = new Comments($this->query);
-		//$post->total_comments = $comments->where('status', '=', 'published')->count();
-
-		$users = new Users($this->query);
-		$post->setAuthor($users->find($post->author));
-
-		return $post;
+		return new Post($row);
 	}
 
 	/**
