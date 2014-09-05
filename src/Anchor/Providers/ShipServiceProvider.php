@@ -7,6 +7,9 @@
  * @license		http://opensource.org/licenses/GPL-3.0
  */
 
+use DateTime;
+use DateInterval;
+
 use Ship\Container;
 use Ship\Contracts\ProviderInterface;
 
