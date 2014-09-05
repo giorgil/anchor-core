@@ -51,7 +51,7 @@ class Users extends Backend {
 
 	public function attempt() {
 		$attempt = $this->auth->attempt(
-			$this->input->filter('user', '', FILTER_SANITIZE_STRING),
+			$this->input->get('user', ''),
 			$this->input->get('pass')
 		);
 
@@ -59,7 +59,7 @@ class Users extends Backend {
 			$this->messages->error('Invalid Login Details');
 
 			$this->session->put('_prev_input', array(
-				'user' => $this->input->filter('user', '', FILTER_SANITIZE_STRING)
+				'user' => $this->input->get('user', '')
 			));
 
 			return $this->response->redirect($this->uri->to('admin/login'));

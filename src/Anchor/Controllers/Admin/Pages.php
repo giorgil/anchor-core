@@ -15,7 +15,7 @@ class Pages extends Backend {
 
 	public function index() {
 		$perpage = 10;
-		$page = $this->input->filter('page', 1, FILTER_SANITIZE_NUMBER_INT);
+		$page = $this->input->get('page', 1);
 		$offset = ($page - 1) * $perpage;
 
 		// @todo: check for page overflow

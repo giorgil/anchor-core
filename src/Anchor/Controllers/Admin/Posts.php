@@ -15,8 +15,8 @@ class Posts extends Backend {
 
 	public function index() {
 		$perpage = 10;
-		$page = $this->input->filter('page', 1, FILTER_SANITIZE_NUMBER_INT);
-		$category = $this->input->filter('category', 0, FILTER_SANITIZE_NUMBER_INT);
+		$page = $this->input->get('page', 1);
+		$category = $this->input->get('category', 0);
 		$offset = ($page - 1) * $perpage;
 
 		// @todo: check for page overflow

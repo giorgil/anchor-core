@@ -15,7 +15,7 @@ class Posts extends Frontend {
 	public function index() {
 		// Pagination
 		$perpage = $this->meta->get('posts_per_page', 10);
-		$page = $this->input->filter('page', 1, FILTER_SANITIZE_NUMBER_INT);
+		$page = $this->input->get('page', 1);
 		$offset = ($page - 1) * $perpage;
 
 		$postCount = $this->posts->count();
